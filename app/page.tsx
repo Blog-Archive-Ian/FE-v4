@@ -1,28 +1,26 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { Button } from '@/components/ui/button'
+import { useQuery } from '@tanstack/react-query'
 
 type Todo = {
-  id: number;
-  title: string;
-};
+  id: number
+  title: string
+}
 
 async function fetchTodos(): Promise<Todo[]> {
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/todos?_limit=5"
-  );
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
   if (!res.ok) {
-    throw new Error("Failed to fetch todos");
+    throw new Error('Failed to fetch todos')
   }
-  return res.json();
+  return res.json()
 }
 
 export default function Home() {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["todos"],
+    queryKey: ['todos'],
     queryFn: fetchTodos,
-  });
+  })
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6">
@@ -35,14 +33,11 @@ export default function Home() {
 
       <ul className="w-full max-w-md space-y-2">
         {data?.map((todo) => (
-          <li
-            key={todo.id}
-            className="border rounded px-3 py-2 text-sm bg-white/5"
-          >
+          <li key={todo.id} className="border rounded px-3 py-2 text-sm bg-white/5">
             {todo.title}
           </li>
         ))}
       </ul>
     </main>
-  );
+  )
 }

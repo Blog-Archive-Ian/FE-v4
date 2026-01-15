@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier \"src/**/*.{ts,tsx,js,jsx,css,md,mdx,json}\" --write"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
