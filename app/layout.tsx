@@ -9,8 +9,8 @@ import { ThemeProvider } from '../shared/providers/theme-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'My Next.js Blog with TanStack Query & shadcn',
+  title: 'Archive',
+  description: "Ian's Tech Blog",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
