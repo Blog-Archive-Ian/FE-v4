@@ -1,9 +1,9 @@
-'use client'
+import ToggleButton from './toggle-button'
 
 export default function Home() {
   return (
-    <div>
-      <p>hello world!</p>
+    <div className="flex gap-3">
+      <ToggleButton />
     </div>
   )
 }
