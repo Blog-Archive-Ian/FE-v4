@@ -1,6 +1,6 @@
-import { ToggleButton } from './toggle-button'
+import { ToggleButton } from '@/shared/ui/molecules/toggle-button'
 
-export const Home = () => {
+export default function Home() {
   return (
     <div className="flex gap-3">
       <ToggleButton />

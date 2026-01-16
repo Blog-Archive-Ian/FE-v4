@@ -11,7 +11,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 const eslintConfig = defineConfig([
   {
-    ignores: ['components/ui/**', 'lib/utils.ts', 'components.json'],
+    ignores: ['**/shared/ui/atoms/**/*', 'shared/lib/utils.ts', 'components.json'],
   },
   ...nextVitals,
   ...nextTs,
