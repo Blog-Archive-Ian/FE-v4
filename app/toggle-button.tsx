@@ -3,7 +3,7 @@ import { useTheme } from 'next-themes'
 
 import { Button } from '@/components/ui/button'
 
-export default function ToggleButton() {
+export const ToggleButton = () => {
   const { setTheme } = useTheme()
 
   return (
