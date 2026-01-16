@@ -1,9 +1,10 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { useTheme } from 'next-themes'
 
+import { Button } from '@/components/ui/button'
+
 export default function ToggleButton() {
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
 
   return (
     <div className="flex gap-3">
