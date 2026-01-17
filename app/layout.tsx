@@ -9,7 +9,7 @@ import { ThemeProvider } from '../shared/providers/theme-provider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Archive',
+  title: 'Archive | 기술블로그',
   description: "Ian's Tech Blog",
 }
 

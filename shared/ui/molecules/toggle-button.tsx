@@ -1,16 +1,42 @@
 'use client'
+
+import { Moon, RefreshCcw, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/shared/ui/atoms/button'
 
 export const ToggleButton = () => {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  const handleToggle = () => {
+    if (theme === 'light') setTheme('dark')
+    else if (theme === 'dark') setTheme('system')
+    else setTheme('light')
+  }
+
+  const renderIcon = () => {
+    if (theme === 'light') return <Sun className="h-5 w-5" />
+    if (theme === 'dark') return <Moon className="h-5 w-5" />
+    return <RefreshCcw className="h-5 w-5" />
+  }
 
   return (
-    <div className="flex gap-3">
-      <Button onClick={() => setTheme('light')}>라이트</Button>
-      <Button onClick={() => setTheme('dark')}>다크</Button>
-      <Button onClick={() => setTheme('system')}>시스템</Button>
-    </div>
+    <Button
+      size="icon"
+      variant="outline"
+      onClick={handleToggle}
+      className="rounded-full"
+      aria-label="Toggle Theme"
+    >
+      {renderIcon()}
+    </Button>
   )
 }
