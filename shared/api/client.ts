@@ -48,25 +48,15 @@ export class API {
       fetchOptions.body = JSON.stringify(options.body)
     }
 
-    try {
-      const res = await fetch(fullUrl, fetchOptions)
+    const res = await fetch(fullUrl, fetchOptions)
 
-      if (!res.ok) {
-        const errorText = await res.text()
-        throw new Error(`API Error: ${res.status} ${res.statusText}\n${errorText}`)
-      }
-
-      const json: unknown = await res.json()
-
-      if (typeof json === 'object' && json !== null && 'data' in json) {
-        return (json as { data: TResponse }).data
-      }
-
-      throw new Error('Invalid API response structure')
-    } catch (error) {
-      console.error('API Error:', error)
-      throw error
+    if (!res.ok) {
+      const errorText = await res.text()
+      throw new Error(`API Error: ${res.status} ${res.statusText}\n${errorText}`)
     }
+
+    const json = (await res.json()) as TResponse
+    return json
   }
 
   static get<TResponse>(url: string, options?: RequestOptions<never>) {
