@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react'
+import { Link2, Mail } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -8,9 +8,9 @@ export const UserInfo = async () => {
   const user = await getUserInfo()
 
   return (
-    <section className="flex w-100 flex-col items-center justify-center p-7.5">
+    <section className="flex w-80 lg:w-100 flex-col items-center justify-center p-7.5">
       {/* Profile Image */}
-      <div className="relative mb-7.5 overflow-hidden rounded-full lg:size-45">
+      <div className="relative mb-7.5 overflow-hidden rounded-full md:size-30 lg:size-45">
         {user.profileImage && (
           <Image
             src={user.profileImage}
@@ -30,7 +30,7 @@ export const UserInfo = async () => {
 
       {/* Email */}
       <div className="flex w-62.5 items-center py-2.5 gap-1">
-        <Mail className="mr-4 size-3 text-muted-foreground" />
+        <Mail className="mr-2.5 size-3.5 text-muted-foreground" />
         <p className="text-sm">{user.email}</p>
       </div>
 
@@ -41,7 +41,21 @@ export const UserInfo = async () => {
         {/* GitHub */}
         {user.githubId && (
           <div className="flex items-center gap-3">
-            <Image src="/icon/github.png" alt="GitHub" width={15} height={15} />
+            <Image
+              src="/icon/github.png"
+              alt="GitHub"
+              className="block dark:hidden"
+              width={15}
+              height={15}
+            />
+            <Image
+              src="/icon/github-white.png"
+              alt="GitHub"
+              className="hidden dark:block"
+              width={15}
+              height={15}
+            />
+
             <Link
               href={`https://github.com/${user.githubId}`}
               target="_blank"
@@ -73,7 +87,7 @@ export const UserInfo = async () => {
 
       {/* Personal URL */}
       <div className="flex w-62.5 items-center py-2.5">
-        <span className="mr-7.5 text-lg">🔗</span>
+        <Link2 className="mr-2.5 size-3.5 shrink-0 text-muted-foreground" />
 
         {user.personalUrl ? (
           <Link
