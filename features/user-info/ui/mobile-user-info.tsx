@@ -8,8 +8,9 @@ export const MobileUserInfo = async () => {
   const user = await getUserInfo()
 
   return (
-    <section className="p-10 border-b border-border">
+    <section className="border-b border-border p-10">
       <div className="flex items-center gap-4">
+        {/* Profile Image */}
         <div className="relative size-14 shrink-0 overflow-hidden rounded-full">
           {user.profileImage && (
             <Image
@@ -22,18 +23,50 @@ export const MobileUserInfo = async () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 min-w-0">
+        {/* Info */}
+        <div className="flex min-w-0 flex-col gap-2">
+          {/* Name / Intro */}
           <div className="flex flex-col">
             <span className="text-base font-semibold">{user.name}</span>
-            <span className="text-sm text-muted-foreground truncate">{user.intro}</span>
+            <span className="truncate text-sm text-muted-foreground">{user.intro}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm min-w-0">
+          {/* Email */}
+          <div className="flex min-w-0 items-center gap-2 text-sm">
             <Mail className="size-4 shrink-0 text-muted-foreground" />
             <span className="truncate">{user.email}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm min-w-0">
+          {/* GitHub */}
+          {user.githubId && (
+            <div className="flex min-w-0 items-center gap-2 text-sm">
+              <Image
+                src="/icon/github.png"
+                alt="GitHub"
+                className="block dark:hidden"
+                width={15}
+                height={15}
+              />
+              <Image
+                src="/icon/github-white.png"
+                alt="GitHub"
+                className="hidden dark:block"
+                width={15}
+                height={15}
+              />{' '}
+              <Link
+                href={`https://github.com/${user.githubId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="truncate transition-colors"
+              >
+                {user.githubId}
+              </Link>
+            </div>
+          )}
+
+          {/* Personal URL */}
+          <div className="flex min-w-0 items-center gap-2 text-sm">
             <Link2 className="size-4 shrink-0 text-muted-foreground" />
             {user.personalUrl ? (
               <Link
@@ -44,7 +77,7 @@ export const MobileUserInfo = async () => {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate transition-colors hover:text-primary"
+                className="truncate transition-colors"
               >
                 {user.personalUrl.replace(/^https?:\/\//, '').split('/')[0]}
               </Link>

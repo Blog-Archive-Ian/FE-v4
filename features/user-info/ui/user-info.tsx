@@ -60,7 +60,7 @@ export const UserInfo = async () => {
               href={`https://github.com/${user.githubId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm transition-colors hover:text-primary"
+              className="text-sm transition-colors"
             >
               {user.githubId}
             </Link>
@@ -75,7 +75,7 @@ export const UserInfo = async () => {
               href={`https://instagram.com/${user.instagramId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm transition-colors hover:text-primary"
+              className="text-sm transition-colors"
             >
               {user.instagramId}
             </Link>
@@ -96,7 +96,7 @@ export const UserInfo = async () => {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm transition-colors hover:text-primary"
+            className="text-sm transition-colors"
           >
             {user.personalUrl.replace(/^https?:\/\//, '').split('/')[0]}
           </Link>
