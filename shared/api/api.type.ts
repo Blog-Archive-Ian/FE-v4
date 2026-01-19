@@ -3,3 +3,8 @@ export type ApiResponse<T> = {
   data: T
   message: string
 }
+
+export type PaginatedResponse<T> = {
+  totalCount: number
+  posts: T[]
+}
