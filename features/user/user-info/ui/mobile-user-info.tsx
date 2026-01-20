@@ -9,9 +9,9 @@ export const MobileUserInfo = async () => {
 
   return (
     <section className="border-b border-border p-10  mx-auto">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-10">
         {/* Profile Image */}
-        <div className="relative size-14 shrink-0 overflow-hidden rounded-full">
+        <div className="relative size-20 shrink-0 overflow-hidden rounded-full">
           {user.profileImage && (
             <Image
               src={user.profileImage}
@@ -19,6 +19,7 @@ export const MobileUserInfo = async () => {
               fill
               className="object-cover"
               priority
+              sizes="20"
             />
           )}
         </div>

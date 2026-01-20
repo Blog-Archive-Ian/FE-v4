@@ -16,7 +16,7 @@ export default async function Home() {
         <div className="flex justify-between">
           <h1 className="text-xl font-bold">고정글</h1>
           <Link
-            href="/posts?pinned=true"
+            href="/post-list?pinned=true"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
           >
             <span>고정글 전체 보기</span>
@@ -30,7 +30,7 @@ export default async function Home() {
         <div className="flex justify-between">
           <h1 className="text-xl font-bold">최신글</h1>
           <Link
-            href="/posts?pinned=true"
+            href="/post-list"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
           >
             <span>최신글 전체 보기</span>

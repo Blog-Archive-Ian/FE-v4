@@ -19,6 +19,7 @@ export const UserInfo = async () => {
               fill
               className="object-cover"
               priority
+              sizes="62.5"
             />
           )}
         </div>
