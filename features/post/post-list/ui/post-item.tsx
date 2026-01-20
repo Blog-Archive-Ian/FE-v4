@@ -9,10 +9,12 @@ type Props = {
 
 export const PostItem = ({ post }: Props) => {
   return (
-    <article key={post.postSeq} className="border-b border-border pb-10">
+    <article key={post.postSeq} className="group border-b border-border pb-10">
       <Link href={`/posts/${post.postSeq}`} className="block">
         <p className="mb-2 text-lg font-semibold text-muted-foreground">{post.category}</p>
-        <h2 className="text-2xl font-semibold leading-tight tracking-tight">{post.title}</h2>
+        <h2 className="text-2xl font-semibold leading-tight tracking-tight decoration-point decoration-4 underline-offset-4 group-hover:underline">
+          {post.title}
+        </h2>
         <p className="mt-5 text-lg leading-7 text-muted-foreground line-clamp-3">
           {stripMarkdown(post.content)}
         </p>

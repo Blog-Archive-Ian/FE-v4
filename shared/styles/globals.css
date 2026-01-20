@@ -74,7 +74,6 @@
 
 .dark {
   --background: #0d1117;
-
   --foreground: oklch(0.98 0 0);
   --primary: oklch(0.35 0 0);
   --primary-foreground: oklch(0.98 0 0);
@@ -89,8 +88,14 @@
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover: #0d1117;
-  --point: oklch(0.8 0.22 108);
+  --point: oklch(95.198% 0.17915 106.293);
   --point-foreground: oklch(0.12 0 0);
+}
+
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
 }
 
 @layer base {
@@ -102,19 +107,15 @@
   }
 }
 
-html,
-body {
-  height: 100%;
-  overscroll-behavior: none;
-}
-
 @layer components {
-  .wmde-markdown h1 {
+  .wmde-markdown h1,
+  .wmde-markdown h2 {
     position: relative;
     padding-bottom: 0.45em;
   }
 
-  .wmde-markdown h1::after {
+  .wmde-markdown h1::after,
+  .wmde-markdown h2::after {
     content: '';
     position: absolute;
     left: 0;
@@ -122,5 +123,19 @@ body {
     bottom: 0;
     height: 3px;
     background: var(--color-point);
+  }
+
+  .wmde-markdown ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+
+  .wmde-markdown ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+  }
+
+  .wmde-markdown li {
+    margin: 0.25rem 0;
   }
 }
