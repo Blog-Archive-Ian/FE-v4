@@ -10,5 +10,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_PROJECT_ID: string
     NEXT_PUBLIC_STORAGE_BUCKET: string
     NEXT_PUBLIC_MESSAGING_SENDER_ID: string
+
+    NODE_ENV: 'development' | 'production' | 'test'
   }
 }

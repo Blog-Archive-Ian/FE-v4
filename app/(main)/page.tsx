@@ -19,7 +19,7 @@ export default async function Home() {
             href="/posts?pinned=true"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
           >
-            <span>전체 보기</span>
+            <span>고정글 전체 보기</span>
             <ChevronRight className="size-4" />
           </Link>
         </div>
@@ -33,7 +33,7 @@ export default async function Home() {
             href="/posts?pinned=true"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
           >
-            <span>전체 보기</span>
+            <span>최신글 전체 보기</span>
             <ChevronRight className="size-4" />
           </Link>
         </div>

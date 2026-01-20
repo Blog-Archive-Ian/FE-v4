@@ -10,7 +10,7 @@ interface TableOfContentsProps {
   title?: string
 }
 
-export function TableOfContents({ title = 'On this page' }: TableOfContentsProps) {
+export const TableOfContents = ({ title = 'On this page' }: TableOfContentsProps) => {
   const [items, setItems] = useState<TOCItem[]>([])
   const [activeId, setActiveId] = useState<string>('')
 

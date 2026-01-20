@@ -137,6 +137,11 @@ body {
   .wmde-markdown li {
     margin: 0.25rem 0;
   }
+
+  .wmde-markdown a {
+    color: var(--color-point) !important;
+    text-decoration: underline !important;
+  }
 }
 
 .scrollbar-hide {
