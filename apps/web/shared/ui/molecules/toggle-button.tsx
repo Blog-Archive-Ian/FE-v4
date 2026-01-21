@@ -1,10 +1,9 @@
 'use client'
 
+import { Button } from '@blog/ui'
 import { Moon, RefreshCcw, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-
-import { Button } from '@/shared/ui/button'
 
 export const ToggleButton = () => {
   const { theme, setTheme } = useTheme()

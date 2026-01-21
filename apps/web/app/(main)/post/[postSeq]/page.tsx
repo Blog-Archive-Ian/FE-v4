@@ -1,3 +1,4 @@
+import { Badge, Separator } from '@blog/ui'
 import { notFound } from 'next/navigation'
 
 import { getPostDetail } from '@/entities/post/post.api'
@@ -6,8 +7,6 @@ import { Comments } from '@/features/post/post-detail/ui/comments'
 import { PostContent } from '@/features/post/post-detail/ui/post-content'
 import { TableOfContents } from '@/features/post/post-detail/ui/toc'
 import { formatKoreanDate } from '@/shared/lib/format'
-import { Badge } from '@/shared/ui/badge'
-import { Separator } from '@/shared/ui/separator'
 
 export default async function PostPage({ params }: { params: Promise<PostSeq> }) {
   const { postSeq } = await params

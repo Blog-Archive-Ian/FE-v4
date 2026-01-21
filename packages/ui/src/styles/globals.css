@@ -2,10 +2,11 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
-@source "../../app/**/*.{js,ts,jsx,tsx,mdx}";
-@source "../../shared/**/*.{js,ts,jsx,tsx,mdx}";
-@source "../../features/**/*.{js,ts,jsx,tsx,mdx}";
-@source "../../entities/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../../apps/web/app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../../apps/web/shared/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../../apps/web/features/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../../apps/web/entities/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../**/*.{js,ts,jsx,tsx,mdx}";
 
 @custom-variant dark (&:is(.dark *));
 
