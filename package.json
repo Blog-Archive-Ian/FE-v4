@@ -8,6 +8,19 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "turbo": "^2.0.0"
+  },
+  "lint-staged": {
+    "apps/web/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -F @apps/web lint:fix"
+    ],
+    "packages/ui/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -F @blog/ui lint:fix"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   }
 }

@@ -1,8 +1,7 @@
 'use client'
 
+import { cn } from '@blog/ui'
 import { useEffect, useMemo, useState } from 'react'
-
-import { cn } from '@/shared/lib/utils'
 
 type TOCItem = { id: string; text: string; level: number }
 

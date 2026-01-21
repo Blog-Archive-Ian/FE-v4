@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 @source "../../app/**/*.{js,ts,jsx,tsx,mdx}";
@@ -115,7 +115,7 @@ body {
 
   .wmde-markdown h1::after,
   .wmde-markdown h2::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
