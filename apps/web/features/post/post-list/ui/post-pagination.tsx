@@ -9,7 +9,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/shared/ui/pagination'
+} from '@blog/ui'
 
 interface Props {
   page: number
