@@ -1,6 +1,6 @@
 'use client'
 
-import { Post } from '@blog/contracts'
+import type { Post } from '@blog/contracts'
 import MDEditor from '@uiw/react-md-editor'
 
 interface Props {

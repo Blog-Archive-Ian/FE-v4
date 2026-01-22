@@ -1,4 +1,4 @@
-import { Post } from '@blog/contracts'
+import type { Post } from '@blog/contracts'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
