@@ -1,7 +1,6 @@
+import { Post } from '@blog/contracts'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-
-import { Post } from '@/entities/post/post.entity'
 
 interface Props {
   post: Post

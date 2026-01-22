@@ -12,3 +12,10 @@ export const PaginatedResponse = <T extends z.ZodTypeAny>(itemSchema: T) =>
     posts: z.array(itemSchema),
     totalCount: z.number(),
   })
+
+export const PaginationQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  size: z.coerce.number().int().min(1).max(100).default(10),
+})
+
+export type PaginationQuery = z.infer<typeof PaginationQuerySchema>

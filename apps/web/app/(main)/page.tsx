@@ -1,9 +1,8 @@
-import { ChevronRight } from 'lucide-react'
-import Link from 'next/link'
-
-import { getPinnedPostList, getPopularPostList, getRecentPostList } from '@/entities/post/post.api'
 import { PostItem } from '@/features/post/post-list/ui/post-item'
 import { SimplePostItem } from '@/features/post/post-list/ui/simple-post-item'
+import { getPinnedPostList, getPopularPostList, getRecentPostList } from '@/shared/api/post.api'
+import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function Home() {
   const posts = await getRecentPostList({ page: 1, size: 5 })

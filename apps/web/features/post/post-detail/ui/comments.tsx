@@ -1,9 +1,8 @@
 'use client'
 
+import { Post } from '@blog/contracts'
 import { useTheme } from 'next-themes'
 import { useEffect, useRef } from 'react'
-
-import { Post } from '@/entities/post/post.entity'
 
 interface Props {
   post: Post

@@ -1,12 +1,11 @@
-import { Badge, Separator } from '@blog/ui'
-import { notFound } from 'next/navigation'
-
-import { getPostDetail } from '@/entities/post/post.api'
 import { Comments } from '@/features/post/post-detail/ui/comments'
 import { PostContent } from '@/features/post/post-detail/ui/post-content'
 import { TableOfContents } from '@/features/post/post-detail/ui/toc'
+import { getPostDetail } from '@/shared/api/post.api'
 import { formatKoreanDate } from '@/shared/lib/format'
 import { GetPostDetailParams } from '@blog/contracts'
+import { Badge, Separator } from '@blog/ui'
+import { notFound } from 'next/navigation'
 
 export default async function PostPage({ params }: { params: Promise<GetPostDetailParams> }) {
   const { postSeq } = await params

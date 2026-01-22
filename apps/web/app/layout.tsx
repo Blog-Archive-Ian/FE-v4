@@ -1,7 +1,5 @@
 import '@blog/ui/styles/globals.css'
-
 import type { Metadata } from 'next'
-
 import { QueryProvider } from '../shared/providers/query-provider'
 import { ThemeProvider } from '../shared/providers/theme-provider'
 

@@ -1,9 +1,8 @@
+import { getUserInfo } from '@/shared/api/user.api'
+import { Button, cn, Separator } from '@blog/ui'
 import { Code2, Github, Mail } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { getUserInfo } from '@/entities/user/user.api'
-import { Button, cn, Separator } from '@blog/ui'
 
 export const Footer = async () => {
   const user = await getUserInfo()

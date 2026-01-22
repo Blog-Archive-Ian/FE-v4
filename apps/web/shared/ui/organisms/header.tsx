@@ -1,8 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-
 import { ToggleButton } from '@/shared/ui/molecules/toggle-button'
+import Link from 'next/link'
 
 export const Header = () => {
   return (

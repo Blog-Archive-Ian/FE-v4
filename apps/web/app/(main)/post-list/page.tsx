@@ -1,12 +1,12 @@
-import { getRecentPostList } from '@/entities/post/post.api'
 import { PostItem } from '@/features/post/post-list/ui/post-item'
 import { PostPagination } from '@/features/post/post-list/ui/post-pagination'
-import { PostListRequest } from '@blog/contracts'
+import { getRecentPostList } from '@/shared/api/post.api'
+import { PaginationQuery } from '@blog/contracts'
 
 export default async function PostListPage({
   searchParams,
 }: {
-  searchParams: Promise<PostListRequest>
+  searchParams: Promise<PaginationQuery>
 }) {
   const page = Number((await searchParams).page ?? 1)
   const size = Number((await searchParams).size ?? 5)

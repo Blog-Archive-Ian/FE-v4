@@ -1,8 +1,7 @@
+import { getUserInfo } from '@/shared/api/user.api'
+import { User } from '@blog/contracts'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useCallback } from 'react'
-
-import { getUserInfo } from '@/entities/user/user.api'
-import { User } from '@blog/contracts'
 
 export const userInfoKey = {
   all: ['userInfo'] as const,

@@ -1,7 +1,7 @@
 'use client'
-import MDEditor from '@uiw/react-md-editor'
 
-import { Post } from '@/entities/post/post.entity'
+import { Post } from '@blog/contracts'
+import MDEditor from '@uiw/react-md-editor'
 
 interface Props {
   post: Post

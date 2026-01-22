@@ -1,7 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
 import {
   Pagination,
   PaginationContent,
@@ -10,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@blog/ui'
+import { useRouter } from 'next/navigation'
 
 interface Props {
   page: number

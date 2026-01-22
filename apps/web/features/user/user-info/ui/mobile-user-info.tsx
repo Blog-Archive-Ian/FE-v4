@@ -1,8 +1,7 @@
+import { getUserInfo } from '@/shared/api/user.api'
 import { Link2, Mail } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { getUserInfo } from '@/entities/user/user.api'
 
 export const MobileUserInfo = async () => {
   const user = await getUserInfo()

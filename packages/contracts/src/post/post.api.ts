@@ -1,15 +1,12 @@
 import { z } from 'zod'
-import { ApiResponse, PaginatedResponse } from '../common'
+import { ApiResponse, PaginatedResponse, PaginationQuerySchema } from '../common'
 import { PostSchema } from './post.schema'
 
 // 최신 글 목록 조회
 export const GetRecentPostList = {
   method: 'GET',
   path: '/post',
-  Query: z.object({
-    page: z.number(),
-    size: z.number(),
-  }),
+  Query: z.object(PaginationQuerySchema.shape),
   Response: ApiResponse(PaginatedResponse(PostSchema)),
 }
 export type GetRecentPostListResponse = z.infer<typeof GetRecentPostList.Response> // 응답 타입
@@ -20,10 +17,7 @@ export type GetRecentPostListData = GetRecentPostListResponse['data'] // 실제 
 export const GetPinnedPostList = {
   method: 'GET',
   path: '/post/pinned',
-  Query: z.object({
-    page: z.number(),
-    size: z.number(),
-  }),
+  Query: z.object(PaginationQuerySchema.shape),
   Response: ApiResponse(PaginatedResponse(PostSchema)),
 }
 export type GetPinnedPostListResponse = z.infer<typeof GetPinnedPostList.Response> // 응답 타입
