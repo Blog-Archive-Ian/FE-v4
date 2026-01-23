@@ -4,6 +4,7 @@ import {
   GetMonthPostListData,
   GetMonthPostListQuery,
   GetMonthPostListResponse,
+  GetPinnedPostList,
   GetPinnedPostListData,
   GetPinnedPostListQuery,
   GetPinnedPostListResponse,
@@ -34,7 +35,7 @@ export async function getPostList(query: GetPostListQuery): Promise<GetPostListD
 export async function getPinnedPostList(
   query: GetPinnedPostListQuery,
 ): Promise<GetPinnedPostListData> {
-  const res = await API.get<GetPinnedPostListResponse>(GetPostList.path, {
+  const res = await API.get<GetPinnedPostListResponse>(GetPinnedPostList.path, {
     next: { revalidate: 5 * 60 },
     params: query,
   })
