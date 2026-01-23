@@ -45,3 +45,17 @@ export const GetPostDetail = {
 export type GetPostDetailResponse = z.infer<typeof GetPostDetail.Response> // 응답 타입
 export type GetPostDetailParams = z.infer<typeof GetPostDetail.Params> // 요청 파라미터 타입
 export type GetPostDetailData = GetPostDetailResponse['data'] // 실제 데이터 타입
+
+// 월별 게시글 목록 조회
+export const GetMonthPostList = {
+  method: 'GET',
+  path: '/post/calendar',
+  Query: z.object({
+    year: z.number(),
+    month: z.number().min(1).max(12),
+  }),
+  Response: ApiResponse(z.array(z.number())),
+}
+export type GetMonthPostListResponse = z.infer<typeof GetMonthPostList.Response> // 응답 타입
+export type GetMonthPostListQuery = z.infer<typeof GetMonthPostList.Query> // 요청 쿼리 타입
+export type GetMonthPostListData = GetMonthPostListResponse['data'] // 실제 데이터 타입

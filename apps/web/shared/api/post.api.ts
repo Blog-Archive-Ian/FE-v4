@@ -1,5 +1,9 @@
 import { API } from '@/shared/api/client'
 import {
+  GetMonthPostList,
+  GetMonthPostListData,
+  GetMonthPostListQuery,
+  GetMonthPostListResponse,
   GetPinnedPostListData,
   GetPinnedPostListQuery,
   GetPinnedPostListResponse,
@@ -51,6 +55,18 @@ export async function getPopularPostList(): Promise<GetPopularPostListData> {
 export async function getPostDetail(params: GetPostDetailParams): Promise<GetPostDetailData> {
   const res = await API.get<GetPostDetailResponse>(GetPostDetail.path(params.postSeq), {
     next: { revalidate: 5 * 60 },
+  })
+  if (res.status !== 200) throw new Error(res.message)
+  return res.data
+}
+
+// 월별 게시글 목록 조회
+export async function getMonthPostList(
+  query: GetMonthPostListQuery,
+): Promise<GetMonthPostListData> {
+  const res = await API.get<GetMonthPostListResponse>(GetMonthPostList.path, {
+    next: { revalidate: 5 * 60 },
+    params: query,
   })
   if (res.status !== 200) throw new Error(res.message)
   return res.data

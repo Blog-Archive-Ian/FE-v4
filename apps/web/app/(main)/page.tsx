@@ -1,13 +1,24 @@
+import { PostCalendar } from '@/features/post/post-calendar/ui/post-calendar'
 import { PostItem } from '@/features/post/post-list/ui/post-item'
 import { SimplePostItem } from '@/features/post/post-list/ui/simple-post-item'
-import { getPinnedPostList, getPopularPostList, getPostList } from '@/shared/api/post.api'
+import {
+  getMonthPostList,
+  getPinnedPostList,
+  getPopularPostList,
+  getPostList,
+} from '@/shared/api/post.api'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function Home() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth() + 1
+
   const posts = await getPostList({ page: 1, size: 5 })
   const pinnedPosts = await getPinnedPostList({ page: 1, size: 5 })
   const popularPosts = await getPopularPostList()
+  const dayList = await getMonthPostList({ year, month })
 
   return (
     <div className="flex gap-10">
@@ -40,13 +51,14 @@ export default async function Home() {
           <PostItem key={post.postSeq} post={post} />
         ))}
       </section>
-      <div className="hidden xl:block xl:w-90 shrink-0">
+      <div className="hidden  xl:w-90 shrink-0 xl:flex xl:flex-col gap-10">
         <div className="border-l-2 border-border pl-8">
           <h2 className="mb-6 text-lg font-semibold">인기글</h2>
           {popularPosts.map((post) => (
             <SimplePostItem key={post.postSeq} post={post} />
           ))}
         </div>
+        <PostCalendar year={year} month={month} dayList={dayList} />
       </div>
     </div>
   )
