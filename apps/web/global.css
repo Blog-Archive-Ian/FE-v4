@@ -1,3 +1,2 @@
 @import '@blog/ui/styles/globals.css';
-
-@source "../**/*.{ts,tsx,mdx}";
+@source '../**/*.{ts,tsx,mdx}';
