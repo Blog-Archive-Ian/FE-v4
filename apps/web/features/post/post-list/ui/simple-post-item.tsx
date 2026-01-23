@@ -9,7 +9,7 @@ interface Props {
 export const SimplePostItem = async ({ post }: Props) => {
   return (
     <Link
-      href="#"
+      href={`/post/${post.postSeq}`}
       className="flex items-center justify-between gap-4 rounded-md py-2 text-muted-foreground"
     >
       <p className="truncate text-md">{post.title}</p>

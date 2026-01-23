@@ -12,7 +12,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
         <p className="text-6xl font-bold tracking-tight text-muted-foreground/30">500</p>
         <h1 className="text-2xl font-semibold">문제가 발생했습니다.</h1>
         <p className="text-sm text-muted-foreground">
-          {extractApiMessage(error)} 잠시 후 다시 시도해주세요.
+          {extractApiMessage(error)} <br /> 잠시 후 다시 시도해주세요.
         </p>
       </div>
 
