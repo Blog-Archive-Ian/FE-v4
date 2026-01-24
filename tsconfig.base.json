@@ -21,9 +21,9 @@
 
     "skipLibCheck": true,
     "baseUrl": ".",
-    "typeRoots": ["./types", "./node_modules/@types"],
     "paths": {
-      "@mega-bird/*": ["packages/*/src"]
+      "@blog/ui": ["packages/ui/src"],
+      "@blog/contracts": ["packages/contracts/src"]
     }
   }
 }

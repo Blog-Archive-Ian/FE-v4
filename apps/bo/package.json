@@ -6,14 +6,22 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "router": "tsr generate"
   },
   "dependencies": {
     "@blog/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.17",
+    "@tanstack/react-router": "^1.156.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.91.2",
+    "@tanstack/router-cli": "^1.156.0",
+    "@tanstack/router-devtools": "^1.156.0",
+    "@tanstack/router-vite-plugin": "^1.156.0",
     "@types/node": "^25.0.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",

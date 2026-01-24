@@ -8,11 +8,7 @@ on:
       - 'packages/ui/**'
       - 'packages/contracts/**'
       - 'pnpm-lock.yaml'
-      - 'package.json'
-      - 'pnpm-workspace.yaml'
-      - 'tsconfig*.json'
-      - 'turbo.json'
-      - '.github/workflows/**'
+      - '.github/workflows/deploy-web.yml'
 
 concurrency:
   group: deploy-web
