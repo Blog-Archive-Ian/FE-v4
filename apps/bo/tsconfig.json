@@ -9,7 +9,11 @@
     "strict": true,
     "skipLibCheck": true,
     "types": ["vite/client"],
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src", "vite.config.ts", "../../types/global.d.ts"]
 }
