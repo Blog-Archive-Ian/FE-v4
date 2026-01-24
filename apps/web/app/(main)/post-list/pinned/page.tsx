@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import { PostItem } from '@/features/post/post-list/ui/post-item'
 import { PostPagination } from '@/features/post/post-list/ui/post-pagination'
 import { getPinnedPostList } from '@/shared/api/post.api'
