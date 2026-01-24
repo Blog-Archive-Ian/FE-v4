@@ -12,6 +12,7 @@ on:
       - 'pnpm-workspace.yaml'
       - 'tsconfig*.json'
       - 'turbo.json'
+      - '.github/workflows/**'
 
 concurrency:
   group: deploy-web
