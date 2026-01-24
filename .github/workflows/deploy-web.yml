@@ -44,10 +44,18 @@ jobs:
               git reset --hard origin/main
 
               # env file (heredoc 대신 printf)
-              printf "NEXT_PUBLIC_API=%s\nNEXT_PUBLIC_BLOG_ID=%s\n" \
-                "${{ secrets.NEXT_PUBLIC_API }}" \
-                "${{ secrets.NEXT_PUBLIC_BLOG_ID }}" \
-                > apps/web/.env.production
+              printf "%s\n" \
+              "NEXT_PUBLIC_API=${{ secrets.NEXT_PUBLIC_API }}" \
+              "NEXT_PUBLIC_GITHUB_REPO=${{ secrets.NEXT_PUBLIC_GITHUB_REPO }}" \
+              "NEXT_PUBLIC_BLOG_ID=${{ secrets.NEXT_PUBLIC_BLOG_ID }}" \
+              "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}" \
+              "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}" \
+              "NEXT_PUBLIC_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_AUTH_DOMAIN }}" \
+              "NEXT_PUBLIC_PROJECT_ID=${{ secrets.NEXT_PUBLIC_PROJECT_ID }}" \
+              "NEXT_PUBLIC_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}" \
+              "NEXT_PUBLIC_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID }}" \
+              "NODE_ENV=production" \
+              > apps/web/.env.production
 
               pnpm install --frozen-lockfile
               pnpm --filter @apps/web build
