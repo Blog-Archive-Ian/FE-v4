@@ -4,7 +4,7 @@ export const ApiResponse = <T extends z.ZodTypeAny>(schema: T) =>
   z.object({
     status: z.number(),
     message: z.string(),
-    data: schema,
+    data: schema.optional().nullable(),
   })
 
 export const PaginatedResponse = <T extends z.ZodTypeAny>(itemSchema: T) =>

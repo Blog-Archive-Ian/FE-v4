@@ -10,9 +10,11 @@
     "router": "tsr generate"
   },
   "dependencies": {
+    "@blog/contracts": "workspace:*",
     "@blog/ui": "workspace:*",
     "@tanstack/react-query": "^5.90.17",
     "@tanstack/react-router": "^1.156.0",
+    "axios": "^1.13.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "zod": "^4.3.5"
