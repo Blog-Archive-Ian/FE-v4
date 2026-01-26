@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { ApiResponse } from '../common'
-import { LoginSchema, UserSchema } from '../user'
+import { LoginSchema, UserSchema } from './user.schema'
 
 // 사용자 계정 정보 조회
 export const GetUserAccount = {
@@ -16,5 +16,7 @@ export const Login = {
   method: 'POST',
   path: '/auth/login',
   Body: LoginSchema,
-  Response: ApiResponse(z.never()),
+  Response: ApiResponse(z.never()), // 로그인 응답에는 데이터가 없음
 }
+export type LoginResponse = z.infer<typeof Login.Response> // 응답 타입
+export type LoginBody = z.infer<typeof Login.Body> // 요청 바디 타입

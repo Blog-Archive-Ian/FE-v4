@@ -10,7 +10,6 @@ export const UserSchema = z.object({
   githubId: z.string(),
   profileImage: z.url(),
 })
-
 export type User = z.infer<typeof UserSchema>
 
 export const LoginSchema = z.object({
