@@ -1,6 +1,6 @@
 import { useLogin } from '@/shared/query-hook/user.query'
 import { LoginSchema } from '@blog/contracts'
-import { Button } from '@blog/ui'
+import { Button, cn } from '@blog/ui'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { email, z } from 'zod'
@@ -71,9 +71,10 @@ export const LoginPage = () => {
             </label>
 
             <p
-              className={`min-h-5 text-right text-xs transition-opacity ${
-                error ? 'text-red-500 opacity-100' : 'opacity-0'
-              }`}
+              className={cn(
+                'min-h-5 text-right text-xs transition-opacity',
+                error ? 'text-red-500 opacity-100' : 'opacity-0',
+              )}
             >
               {error ?? 'placeholder'}
             </p>
