@@ -16,3 +16,17 @@ export const LoginSchema = z.object({
   email: z.string().pipe(z.email()),
   password: z.string().min(1),
 })
+
+export const EditUserSchema = z.object({
+  name: z.string(),
+  intro: z.string(),
+  instagramId: z.string(),
+  githubId: z.string(),
+  personalUrl: z.url(),
+})
+export type EditUser = z.infer<typeof EditUserSchema>
+
+export const EditUserProfileImageSchema = z.object({
+  profileImage: z.url(),
+})
+export type EditUserProfileImage = z.infer<typeof EditUserProfileImageSchema>
