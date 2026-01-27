@@ -11,6 +11,7 @@ export * from './components/popover'
 export * from './components/select'
 export * from './components/separator'
 export * from './components/sheet'
+export * from './components/sidebar'
 export * from './components/skeleton'
 export * from './components/sonner'
 

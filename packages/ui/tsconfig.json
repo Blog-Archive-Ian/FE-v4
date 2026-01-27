@@ -7,7 +7,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "paths": {
-      "@repo/ui/*": ["src/*"]
+      "@blog/ui/*": ["./src/*"]
     }
   },
   "include": ["src"]
