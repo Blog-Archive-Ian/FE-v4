@@ -10,7 +10,7 @@ import { Button, Input, Label, Separator, toast } from '@blog/ui'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useWatch } from 'react-hook-form'
-import { useEditUserForm } from './useEditForm'
+import { useEditUserForm } from './use-edit-form'
 export const EditUserPage = () => {
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement | null>(null)
