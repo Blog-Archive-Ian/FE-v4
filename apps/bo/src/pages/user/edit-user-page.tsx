@@ -1,3 +1,4 @@
+import { UnsavedChangesGuard } from '@/shared/components/molecules/unsaved-changes-guard'
 import {
   useEditUserInfo,
   useEditUserProfileImage,
@@ -5,54 +6,55 @@ import {
 } from '@/shared/query-hook/user.query'
 import { isValidUrlOrEmpty } from '@/shared/utils/format'
 import { uploadImage } from '@/shared/utils/upload-image'
-import type { EditUserBody } from '@blog/contracts'
-import { Button, Input, Label, Separator } from '@blog/ui'
+import { Button, Input, Label, Separator, toast } from '@blog/ui'
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-
-export function EditUserPage() {
+import { useEffect, useRef } from 'react'
+import { useWatch } from 'react-hook-form'
+import { useEditUserForm } from './useEditForm'
+export const EditUserPage = () => {
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement | null>(null)
 
-  const [form, setForm] = useState<EditUserBody>({
-    name: '',
-    intro: '',
-    instagramId: '',
-    githubId: '',
-    personalUrl: '',
-  })
-  const [error, setError] = useState<string>('')
-
   const { data: user, isLoading } = useUserInfo()
   const { mutateAsync: editInfo, isPending: isSavingInfo } = useEditUserInfo({
-    onError: (e) => setError(e.message),
+    onSuccess: () => {
+      toast.success('Profile updated successfully')
+    },
+    onError: () => {
+      toast.error('Failed to update profile')
+    },
   })
-  const { mutateAsync: editProfile, isPending: isSavingProfile } = useEditUserProfileImage({
-    onError: (e) => setError(e.message),
+  const { mutateAsync: editProfileImage, isPending: isSavingProfile } = useEditUserProfileImage({
+    onSuccess: () => {
+      toast.success('Profile image updated successfully')
+    },
+    onError: () => {
+      toast.error('Failed to update profile image')
+    },
   })
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { isDirty, isValid },
+  } = useEditUserForm()
 
   useEffect(() => {
     if (!user) return
-    setForm({
+    reset({
       name: user.name ?? '',
       intro: user.intro ?? '',
       instagramId: user.instagramId ?? '',
       githubId: user.githubId ?? '',
       personalUrl: user.personalUrl ?? '',
     })
-  }, [user])
+  }, [user, reset])
 
-  const canSave = useMemo(() => {
-    if (!form.name.trim()) return false
-    if (!form.intro.trim()) return false
-    if (!form.instagramId.trim()) return false
-    if (!form.githubId.trim()) return false
-    if (!isValidUrlOrEmpty(form.personalUrl.trim())) return false
-    return true
-  }, [form])
+  const personalUrl = useWatch({ name: 'personalUrl', control })
 
   const onClickEditPhoto = () => {
-    setError('')
     fileRef.current?.click()
   }
 
@@ -61,33 +63,24 @@ export function EditUserPage() {
     e.target.value = ''
     if (!file) return
 
-    try {
-      setError('')
-      const url = await uploadImage(file, 'thumbnail')
-      await editProfile({ profileImage: url })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '이미지 업로드 실패')
-    }
+    const url = await uploadImage(file, 'thumbnail')
+    await editProfileImage({ profileImage: url })
   }
 
-  const onSave = async () => {
-    setError('')
-
-    if (!canSave) {
-      setError('입력값을 확인해주세요. (URL 포함)')
-      return
+  const onSubmit = handleSubmit(async (values) => {
+    const payload = {
+      name: values.name.trim(),
+      intro: values.intro.trim(),
+      instagramId: values.instagramId.trim(),
+      githubId: values.githubId.trim(),
+      personalUrl: values.personalUrl.trim() ?? '',
     }
+    await editInfo(payload)
+    reset(payload, { keepDefaultValues: false })
+    navigate({ to: '/user/info', replace: true })
+  })
 
-    await editInfo({
-      name: form.name.trim(),
-      intro: form.intro.trim(),
-      instagramId: form.instagramId.trim(),
-      githubId: form.githubId.trim(),
-      personalUrl: form.personalUrl.trim(),
-    })
-
-    navigate({ to: '/user/info' })
-  }
+  const canSave = isDirty && isValid && isValidUrlOrEmpty((personalUrl ?? '').trim())
 
   if (isLoading) return <div className="p-6 text-sm text-muted-foreground">Loading...</div>
   if (!user) return <div className="p-6 text-sm text-destructive">No user.</div>
@@ -104,14 +97,13 @@ export function EditUserPage() {
       <Separator className="my-8" />
 
       <div className="flex flex-col-reverse gap-10 lg:flex-row">
-        <main className="flex-1 space-y-7">
+        <form onSubmit={onSubmit} className="flex-1 space-y-7">
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              value={form.name}
-              onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
               placeholder="Your name"
+              {...register('name', { required: true, validate: (v) => !!v.trim() })}
             />
           </div>
 
@@ -119,9 +111,8 @@ export function EditUserPage() {
             <Label htmlFor="intro">Bio</Label>
             <Input
               id="intro"
-              value={form.intro}
-              onChange={(e) => setForm((p) => ({ ...p, intro: e.target.value }))}
               placeholder="Introduce yourself"
+              {...register('intro', { required: true, validate: (v) => !!v.trim() })}
             />
           </div>
 
@@ -129,9 +120,8 @@ export function EditUserPage() {
             <Label htmlFor="githubId">GitHub</Label>
             <Input
               id="githubId"
-              value={form.githubId}
-              onChange={(e) => setForm((p) => ({ ...p, githubId: e.target.value }))}
               placeholder="github id"
+              {...register('githubId', { required: true, validate: (v) => !!v.trim() })}
             />
           </div>
 
@@ -139,9 +129,8 @@ export function EditUserPage() {
             <Label htmlFor="instagramId">Instagram</Label>
             <Input
               id="instagramId"
-              value={form.instagramId}
-              onChange={(e) => setForm((p) => ({ ...p, instagramId: e.target.value }))}
               placeholder="instagram id"
+              {...register('instagramId', { required: true, validate: (v) => !!v.trim() })}
             />
           </div>
 
@@ -149,34 +138,30 @@ export function EditUserPage() {
             <Label htmlFor="personalUrl">URL</Label>
             <Input
               id="personalUrl"
-              value={form.personalUrl}
-              onChange={(e) => setForm((p) => ({ ...p, personalUrl: e.target.value }))}
               placeholder="https://example.com"
+              {...register('personalUrl', {
+                required: true,
+                validate: (v) => isValidUrlOrEmpty(v.trim()),
+              })}
             />
             <p className="text-xs text-muted-foreground">
               URL은 <span className="font-medium">https://</span> 포함해서 넣어주세요.
             </p>
           </div>
 
-          {error ? (
-            <p className="text-sm text-destructive">{error}</p>
-          ) : (
-            <div className="min-h-5" />
-          )}
-
-          <div className="pt-2 ">
+          <div className="pt-2">
             <Button
-              type="button"
+              type="submit"
               size="lg"
               className="w-full md:w-40"
-              onClick={onSave}
               disabled={!canSave || isSavingInfo}
             >
               {isSavingInfo ? 'Saving...' : 'Save'}
             </Button>
           </div>
-        </main>
+        </form>
 
+        {/* Profile */}
         <aside className="flex flex-col gap-3 lg:w-90">
           <p className="text-xs font-medium text-muted-foreground">Profile picture</p>
 
@@ -203,6 +188,7 @@ export function EditUserPage() {
           </Button>
         </aside>
       </div>
+      <UnsavedChangesGuard isDirty={isDirty} />
     </div>
   )
 }

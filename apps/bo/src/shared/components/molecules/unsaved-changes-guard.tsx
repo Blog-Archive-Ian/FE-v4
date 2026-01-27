@@ -42,7 +42,7 @@ export const UnsavedChangesGuard = ({ isDirty }: { isDirty: boolean }) => {
             취소
           </Button>
           <Button
-            variant="destructive"
+            className="bg-red-500 text-white"
             onClick={() => {
               blocker?.proceed?.()
               setOpen(false)

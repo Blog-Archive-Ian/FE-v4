@@ -74,10 +74,10 @@ export const useEditUserInfo = (
       const res = await editUserInfo(body)
       return res
     },
-    ...options,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: authQueryKeys.userInfo() })
     },
+    ...options,
   })
 }
 
@@ -91,9 +91,9 @@ export const useEditUserProfileImage = (
       const res = await editUserProfileImage(body)
       return res
     },
-    ...options,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: authQueryKeys.userInfo() })
     },
+    ...options,
   })
 }

@@ -2,7 +2,7 @@ import { useUserInfo } from '@/shared/query-hook/user.query'
 import { Button, Separator } from '@blog/ui'
 import { Link } from '@tanstack/react-router'
 
-function Field({ label, value }: { label: string; value?: string }) {
+const Field = ({ label, value }: { label: string; value?: string }) => {
   return (
     <div className="space-y-1">
       <p className="text-xs font-medium text-muted-foreground">{label}</p>
@@ -13,7 +13,7 @@ function Field({ label, value }: { label: string; value?: string }) {
   )
 }
 
-export function UserPage() {
+export const UserPage = () => {
   const { data: user, isLoading, isError } = useUserInfo()
 
   if (isLoading) return <div className="p-6 text-sm text-muted-foreground">Loading...</div>
