@@ -4,6 +4,7 @@ import {
   type EditUserProfileImageResponse,
   type EditUserResponse,
   type GetUserAccountData,
+  type GetUserCategoriesData,
   type LoginBody,
   type LoginResponse,
 } from '@blog/contracts'
@@ -16,12 +17,20 @@ import {
   type UseQueryOptions,
 } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { authCheck, editUserInfo, editUserProfileImage, getUserInfo, login } from '../api/user.api'
+import {
+  authCheck,
+  editUserInfo,
+  editUserProfileImage,
+  getCategories,
+  getUserInfo,
+  login,
+} from '../api/user.api'
 
 export const userQueryKeys = {
   all: ['auth'] as const,
   authCheck: () => [...userQueryKeys.all, 'auth-check'] as const,
   userInfo: () => [...userQueryKeys.all, 'user-info'] as const,
+  getCategories: () => [...userQueryKeys.all, 'categories'] as const,
 }
 
 // 사용자 인증
@@ -94,6 +103,19 @@ export const useEditUserProfileImage = (
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userQueryKeys.userInfo() })
     },
+    ...options,
+  })
+}
+
+// 카테고리 조회
+export const useCategories = (options?: UseQueryOptions<GetUserCategoriesData, Error>) => {
+  return useQuery({
+    queryKey: userQueryKeys.getCategories(),
+    queryFn: async () => {
+      const res = await getCategories()
+      return res
+    },
+    select: useCallback((data: GetUserCategoriesData) => data, []),
     ...options,
   })
 }

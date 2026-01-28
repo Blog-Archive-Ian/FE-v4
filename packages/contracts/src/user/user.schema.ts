@@ -30,3 +30,10 @@ export const EditUserProfileImageSchema = z.object({
   profileImage: z.url(),
 })
 export type EditUserProfileImage = z.infer<typeof EditUserProfileImageSchema>
+
+export const CategorySchema = z.object({
+  categoryId: z.number(),
+  name: z.string(),
+  postCount: z.number(),
+})
+export type Category = z.infer<typeof CategorySchema>

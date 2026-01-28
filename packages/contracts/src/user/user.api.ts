@@ -1,6 +1,12 @@
 import { z } from 'zod'
 import { ApiResponse, ApiResponseStrict } from '../common'
-import { EditUserProfileImageSchema, EditUserSchema, LoginSchema, UserSchema } from './user.schema'
+import {
+  CategorySchema,
+  EditUserProfileImageSchema,
+  EditUserSchema,
+  LoginSchema,
+  UserSchema,
+} from './user.schema'
 
 // 사용자 계정 정보 조회
 export const GetUserAccount = {
@@ -48,3 +54,12 @@ export const EditUserProfileImage = {
 }
 export type EditUserProfileImageBody = z.infer<typeof EditUserProfileImage.Body> // 요청 바디 타입
 export type EditUserProfileImageResponse = z.infer<typeof EditUserProfileImage.Response> // 응답 타입
+
+// 카테고리 조회
+export const getUserCategories = {
+  method: 'GET',
+  path: '/user/categories',
+  Response: ApiResponseStrict(CategorySchema.array()),
+}
+export type GetUserCategoriesResponse = z.infer<typeof getUserCategories.Response> // 응답 타입
+export type GetUserCategoriesData = GetUserCategoriesResponse['data'] // 실제 데이터 타입

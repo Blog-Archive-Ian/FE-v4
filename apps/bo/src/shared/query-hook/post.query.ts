@@ -1,4 +1,6 @@
 import type {
+  CreatePostBody,
+  CreatePostData,
   GetArchivedPostListData,
   GetArchivedPostListQuery,
   GetPinnedPostListData,
@@ -9,7 +11,13 @@ import type {
   GetPostListData,
   GetPostListQuery,
 } from '@blog/contracts'
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type UseMutationOptions,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { useCallback } from 'react'
 import {
   getArchivedPostList,
@@ -18,6 +26,7 @@ import {
   getPostDetail,
   getPostList,
 } from '../api/post.api'
+import { createPost } from '../api/user.api'
 
 export const postQueryKeys = {
   all: ['post'] as const,
@@ -103,6 +112,23 @@ export const usePostDetail = (
       return res
     },
     select: useCallback((data: GetPostDetailData | null) => data, []),
+    ...options,
+  })
+}
+
+// 글 작성
+export const useCreatePost = (
+  options?: UseMutationOptions<CreatePostData, Error, CreatePostBody>,
+) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (body: CreatePostBody) => {
+      const res = await createPost(body)
+      return res
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: postQueryKeys.all })
+    },
     ...options,
   })
 }

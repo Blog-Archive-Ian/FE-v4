@@ -20,3 +20,11 @@ export const PostListQuerySchema = PaginationQuerySchema.extend({
   tag: z.string().optional(),
   category: z.string().optional(),
 })
+
+export const CreatePostSchema = z.object({
+  title: z.string().min(1).max(100),
+  content: z.string().min(1),
+  tags: z.array(z.string()).max(10),
+  category: z.string().min(1),
+})
+export type CreatePost = z.infer<typeof CreatePostSchema>
