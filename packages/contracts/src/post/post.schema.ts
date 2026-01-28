@@ -27,4 +27,3 @@ export const CreatePostSchema = z.object({
   tags: z.array(z.string()).max(10),
   category: z.string().min(1),
 })
-export type CreatePost = z.infer<typeof CreatePostSchema>
