@@ -18,15 +18,15 @@ import {
 import { useCallback } from 'react'
 import { authCheck, editUserInfo, editUserProfileImage, getUserInfo, login } from '../api/user.api'
 
-export const authQueryKeys = {
+export const userQueryKeys = {
   all: ['auth'] as const,
-  authCheck: () => [...authQueryKeys.all, 'auth-check'] as const,
-  userInfo: () => [...authQueryKeys.all, 'user-info'] as const,
+  authCheck: () => [...userQueryKeys.all, 'auth-check'] as const,
+  userInfo: () => [...userQueryKeys.all, 'user-info'] as const,
 }
 
 // 사용자 인증
 export const authCheckQueryOptions = queryOptions({
-  queryKey: authQueryKeys.authCheck(),
+  queryKey: userQueryKeys.authCheck(),
   queryFn: async () => {
     const res = await authCheck()
     return res
@@ -54,7 +54,7 @@ export const useLogin = (options?: UseMutationOptions<LoginResponse, Error, Logi
 // 사용자 정보
 export const useUserInfo = (options?: UseQueryOptions<GetUserAccountData, Error>) => {
   return useQuery({
-    queryKey: authQueryKeys.userInfo(),
+    queryKey: userQueryKeys.userInfo(),
     queryFn: async () => {
       const res = await getUserInfo()
       return res
@@ -75,7 +75,7 @@ export const useEditUserInfo = (
       return res
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: authQueryKeys.userInfo() })
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.userInfo() })
     },
     ...options,
   })
@@ -92,7 +92,7 @@ export const useEditUserProfileImage = (
       return res
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: authQueryKeys.userInfo() })
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.userInfo() })
     },
     ...options,
   })

@@ -11,6 +11,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useWatch } from 'react-hook-form'
 import { useEditUserForm } from './use-edit-user-form'
+
 export const EditUserPage = () => {
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement | null>(null)
