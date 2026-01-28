@@ -7,7 +7,7 @@ export const Route = createFileRoute('/(auth)/posts/list')({
   validateSearch: (params: Partial<GetPostListQuery>): Partial<GetPostListQuery> => {
     return {
       page: params.page ? Math.max(1, params.page) : 1,
-      size: params.size ? Math.min(Math.max(1, params.size), 100) : 10,
+      size: params.size ? Math.min(Math.max(1, params.size), 100) : 100,
     }
   },
 })
