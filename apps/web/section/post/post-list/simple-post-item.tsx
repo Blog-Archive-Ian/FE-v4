@@ -1,9 +1,9 @@
-import type { Post } from '@blog/contracts'
+import type { PostType } from '@blog/contracts'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 interface Props {
-  post: Post
+  post: PostType
 }
 
 export const SimplePostItem = async ({ post }: Props) => {

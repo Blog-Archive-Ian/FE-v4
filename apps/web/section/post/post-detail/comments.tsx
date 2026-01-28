@@ -1,11 +1,11 @@
 'use client'
 
-import type { Post } from '@blog/contracts'
+import type { PostType } from '@blog/contracts'
 import { useTheme } from 'next-themes'
 import { useEffect, useRef } from 'react'
 
 interface Props {
-  post: Post
+  post: PostType
 }
 
 export const Comments = ({ post }: Props) => {

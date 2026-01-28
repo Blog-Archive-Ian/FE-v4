@@ -1,10 +1,10 @@
-import { User } from '@blog/contracts'
+import { UserType } from '@blog/contracts'
 import { Link2, Mail } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 interface UserInfoProps {
-  user: User
+  user: UserType
 }
 
 export const MobileUserInfo = ({ user }: UserInfoProps) => {

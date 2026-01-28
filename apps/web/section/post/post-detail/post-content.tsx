@@ -1,10 +1,10 @@
 'use client'
 
-import type { Post } from '@blog/contracts'
+import type { PostType } from '@blog/contracts'
 import MDEditor from '@uiw/react-md-editor'
 
 interface Props {
-  post: Post
+  post: PostType
 }
 
 export const PostContent = ({ post }: Props) => {

@@ -14,7 +14,7 @@ export const PostSchema = z.object({
   archived: z.boolean(),
 })
 
-export type Post = z.infer<typeof PostSchema>
+export type PostType = z.infer<typeof PostSchema>
 
 export const PostListQuerySchema = PaginationQuerySchema.extend({
   tag: z.string().optional(),

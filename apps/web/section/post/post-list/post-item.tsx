@@ -1,9 +1,9 @@
 import { formatKoreanDate, stripMarkdown } from '@/shared/lib/format'
-import type { Post } from '@blog/contracts'
+import type { PostType } from '@blog/contracts'
 import Link from 'next/link'
 
 type Props = {
-  post: Post
+  post: PostType
 }
 
 export const PostItem = ({ post }: Props) => {
