@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CacheTags } from '../cache'
 import { ApiResponse, ApiResponseStrict, PaginatedResponse } from '../common'
 import {
   CreatePostSchema,
@@ -75,7 +76,15 @@ export const CreatePost = {
       postSeq: z.number(),
     }),
   ),
-}
+  revalidate: () => [
+    CacheTags.Post.list,
+    CacheTags.Post.popular,
+    CacheTags.Post.pinned,
+    CacheTags.Post.all,
+    CacheTags.User.categories,
+    CacheTags.User.tags,
+  ],
+} as const
 export type CreatePostResponse = z.infer<typeof CreatePost.Response> // 응답 타입
 export type CreatePostBody = z.infer<typeof CreatePost.Body> // 요청 바디 타입
 export type CreatePostData = CreatePostResponse['data'] // 실제 데이터 타입
@@ -88,7 +97,15 @@ export const DeletePost = {
     postSeq: z.number(),
   }),
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.list,
+    CacheTags.Post.popular,
+    CacheTags.Post.pinned,
+    CacheTags.User.categories,
+    CacheTags.User.tags,
+  ],
+} as const
 export type DeletePostResponse = z.infer<typeof DeletePost.Response> // 응답 타입
 export type DeletePostParams = z.infer<typeof DeletePost.Params> // 요청 파라미터 타입
 
@@ -101,7 +118,15 @@ export const UpdatePost = {
   }),
   Body: CreatePostSchema,
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.list,
+    CacheTags.Post.popular,
+    CacheTags.Post.pinned,
+    CacheTags.User.categories,
+    CacheTags.User.tags,
+  ],
+} as const
 export type UpdatePostResponse = z.infer<typeof UpdatePost.Response>
 export type UpdatePostParams = z.infer<typeof UpdatePost.Params>
 export type UpdatePostBody = z.infer<typeof UpdatePost.Body>
@@ -121,47 +146,69 @@ export type GetFilteredPostListData = GetFilteredPostListResponse['data'] // 실
 // 글 고정
 export const PinPost = {
   method: 'POST',
-  path: (postSeq: number | string) => `post/${postSeq}/pin`,
+  path: (postSeq: number | string) => `/post/${postSeq}/pin`,
   Params: z.object({
     postSeq: z.number(),
   }),
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.pinned,
+    CacheTags.Post.list,
+  ],
+} as const
 export type PinPostResponse = z.infer<typeof PinPost.Response>
 export type PinPostParams = z.infer<typeof PinPost.Params>
 
 // 글 고정해제
 export const UnPinPost = {
   method: 'POST',
-  path: (postSeq: number | string) => `post/${postSeq}/unpin`,
+  path: (postSeq: number | string) => `/post/${postSeq}/unpin`,
   Params: z.object({
     postSeq: z.number(),
   }),
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.pinned,
+    CacheTags.Post.list,
+  ],
+} as const
 export type UnPinPostResponse = z.infer<typeof UnPinPost.Response>
 export type UnPinPostParams = z.infer<typeof UnPinPost.Params>
 
 // 글 보관
 export const ArchivePost = {
   method: 'POST',
-  path: (postSeq: number | string) => `post/${postSeq}/archive`,
+  path: (postSeq: number | string) => `/post/${postSeq}/archive`,
   Params: z.object({
     postSeq: z.number(),
   }),
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.list,
+    CacheTags.Post.popular,
+    CacheTags.Post.pinned,
+  ],
+} as const
 export type ArchivePostResponse = z.infer<typeof ArchivePost.Response>
 export type ArchivePostParams = z.infer<typeof ArchivePost.Params>
 
 // 글 보관 해제
 export const UnArchivePost = {
   method: 'POST',
-  path: (postSeq: number | string) => `post/${postSeq}/unarchive`,
+  path: (postSeq: number | string) => `/post/${postSeq}/unarchive`,
   Params: z.object({
     postSeq: z.number(),
   }),
   Response: ApiResponse(z.never()),
-}
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.list,
+    CacheTags.Post.popular,
+    CacheTags.Post.pinned,
+  ],
+} as const
 export type UnArchivePostResponse = z.infer<typeof UnArchivePost.Response>
 export type UnArchivePostParams = z.infer<typeof UnArchivePost.Params>

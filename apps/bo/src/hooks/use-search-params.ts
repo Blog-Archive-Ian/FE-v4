@@ -49,17 +49,6 @@ export type SearchLike<T> = {
 type Updater<T> = T | ((prev: T) => T)
 
 /**
- * 원시값이 "비어있음"인지 판단한다.
- *
- * ## 빈 값 처리 기준
- * - `undefined` / `null` / `''`(빈 문자열)을 빈 값으로 간주한다.
- *
- * @param v - 검사할 값
- * @returns 빈 값이면 `true`
- */
-// const isEmptyPrimitive = (v: Primitive) => v === undefined || v === null || v === ''
-
-/**
  * patch 객체를 search에 적용 가능한 형태로 정규화한다.
  *
  * ## 동작

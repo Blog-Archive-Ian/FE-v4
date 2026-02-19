@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CacheTags } from '../cache'
 import { ApiResponse, ApiResponseStrict } from '../common'
 import {
   CategorySchema,
@@ -42,6 +43,7 @@ export const EditUser = {
   path: '/user/update',
   Body: EditUserSchema,
   Response: ApiResponse(z.never()),
+  revalidate: () => [CacheTags.User.account, CacheTags.User.all],
 }
 export type EditUserBody = z.infer<typeof EditUser.Body> // 요청 바디 타입
 export type EditUserResponse = z.infer<typeof EditUser.Response> // 응답 타입
@@ -52,6 +54,7 @@ export const EditUserProfileImage = {
   path: '/user/update/profileimage',
   Body: EditUserProfileImageSchema,
   Response: ApiResponse(z.never()),
+  revalidate: () => [CacheTags.User.account, CacheTags.User.all],
 }
 export type EditUserProfileImageBody = z.infer<typeof EditUserProfileImage.Body> // 요청 바디 타입
 export type EditUserProfileImageResponse = z.infer<typeof EditUserProfileImage.Response> // 응답 타입

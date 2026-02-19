@@ -50,6 +50,7 @@ jobs:
               "DB_NAME=${{ secrets.DB_NAME }}" \
               "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" \
               "FRONT_URL=${{ secrets.FRONT_URL }}" \
+              "REVALIDATE_SECRET=${{ secrets.REVALIDATE_SECRET }}" \
               "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
               > apps/api/.env
 

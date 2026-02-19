@@ -1,20 +1,29 @@
-import type {
-  ArchivePostParams,
-  CreatePostBody,
-  DeletePostParams,
-  GetFilteredPostListData,
-  GetFilteredPostListQuery,
-  GetMonthPostListQuery,
-  GetPopularPostListData,
-  GetPostDetailData,
-  GetPostDetailParams,
-  PinPostParams,
-  UnArchivePostParams,
-  UnPinPostParams,
-  UpdatePostBody,
-  UpdatePostParams,
+import {
+  ArchivePost,
+  type ArchivePostParams,
+  CacheTags,
+  CreatePost,
+  type CreatePostBody,
+  DeletePost,
+  type DeletePostParams,
+  type GetFilteredPostListData,
+  type GetFilteredPostListQuery,
+  type GetMonthPostListQuery,
+  type GetPopularPostListData,
+  type GetPostDetailData,
+  type GetPostDetailParams,
+  PinPost,
+  type PinPostParams,
+  UnArchivePost,
+  type UnArchivePostParams,
+  UnPinPost,
+  type UnPinPostParams,
+  UpdatePost,
+  type UpdatePostBody,
+  type UpdatePostParams,
 } from '@blog/contracts';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { RevalidateService } from 'src/common/revalidate.service';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { PostMapper } from './post.mapper';
@@ -24,6 +33,7 @@ export class PostService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mapper: PostMapper,
+    private readonly revalidate: RevalidateService,
   ) {}
 
   // 글 목록 조회
@@ -99,6 +109,10 @@ export class PostService {
     if (updated.count === 0) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
+    await this.revalidate.revalidateTags(
+      ArchivePost.revalidate(params.postSeq),
+    );
   }
 
   // 글 보관 해제
@@ -111,6 +125,10 @@ export class PostService {
     if (updated.count === 0) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
+    await this.revalidate.revalidateTags(
+      UnArchivePost.revalidate(params.postSeq),
+    );
   }
 
   // 글 고정
@@ -123,6 +141,8 @@ export class PostService {
     if (updated.count === 0) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
+    await this.revalidate.revalidateTags(PinPost.revalidate(params.postSeq));
   }
 
   // 글 고정 해제
@@ -135,6 +155,8 @@ export class PostService {
     if (updated.count === 0) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
+    await this.revalidate.revalidateTags(UnPinPost.revalidate(params.postSeq));
   }
 
   async createPost(
@@ -158,6 +180,12 @@ export class PostService {
     });
 
     await this.replacePostTags(created.post_seq, body.tags, userId);
+
+    const postSeq = Number(created.post_seq);
+    await this.revalidate.revalidateTags([
+      ...CreatePost.revalidate(),
+      CacheTags.Post.byId(postSeq),
+    ]);
 
     return { postSeq: Number(created.post_seq) };
   }
@@ -187,6 +215,7 @@ export class PostService {
     });
 
     await this.replacePostTags(postSeq, body.tags, userId);
+    await this.revalidate.revalidateTags(UpdatePost.revalidate(params.postSeq));
   }
 
   // 글 삭제
@@ -198,6 +227,8 @@ export class PostService {
     if (deleted.count === 0) {
       throw new NotFoundException('게시글을 찾을 수 없습니다.');
     }
+
+    await this.revalidate.revalidateTags(DeletePost.revalidate(params.postSeq));
   }
 
   // 글 상세 조회

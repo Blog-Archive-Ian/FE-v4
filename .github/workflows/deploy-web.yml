@@ -43,6 +43,7 @@ jobs:
           NEXT_PUBLIC_API=${{ secrets.NEXT_PUBLIC_API }}
           NEXT_PUBLIC_GITHUB_REPO=${{ secrets.NEXT_PUBLIC_GITHUB_REPO }}
           NEXT_PUBLIC_BLOG_ID=${{ secrets.NEXT_PUBLIC_BLOG_ID }}
+          REVALIDATE_SECRET=${{ secrets.REVALIDATE_SECRET }}
           NODE_ENV=production
           EOF
 

@@ -1,5 +1,6 @@
 import { Alert } from '@/shared/components/molecules/alert'
 import { PostContent } from '@/shared/components/molecules/post-content'
+import { PostPdfDownloadButton } from '@/shared/components/molecules/post-pdf-download-button'
 import { TableOfContents } from '@/shared/components/molecules/toc'
 import {
   useArchivePost,
@@ -110,6 +111,7 @@ export const PostDetailPage = () => {
               >
                 <Archive className={post.archived ? 'size-4 fill-current' : 'size-4'} />
               </Button>
+              <PostPdfDownloadButton post={post} />
             </div>
           </div>
           <Separator className="mt-3 mb-6" />
