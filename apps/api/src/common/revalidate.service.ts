@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 export class RevalidateService {
   private readonly logger = new Logger(RevalidateService.name);
 
-  private readonly webUrl = process.env.WEB_URL;
+  private readonly webUrl = process.env.FRONT_URL;
   private readonly secret = process.env.REVALIDATE_SECRET;
 
   async revalidateTags(tags: string[]) {
@@ -12,7 +12,7 @@ export class RevalidateService {
 
     if (!this.webUrl || !this.secret) {
       this.logger.warn(
-        'Revalidate skipped: WEB_URL or REVALIDATE_SECRET missing',
+        'Revalidate skipped: FRONT_URL or REVALIDATE_SECRET missing',
       );
       return;
     }
