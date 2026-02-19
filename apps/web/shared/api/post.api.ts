@@ -1,5 +1,6 @@
 import { API } from '@/shared/api/client'
 import {
+  CacheTags,
   GetFilteredPostListData,
   GetFilteredPostListQuery,
   GetFilteredPostListResponse,
@@ -26,7 +27,7 @@ export async function getPostList(
   query: GetFilteredPostListQuery,
 ): Promise<GetFilteredPostListData> {
   const res = await API.get<GetFilteredPostListResponse>(GetPostList.path, {
-    next: { revalidate: 5 * 60, tags: ['post:list'] },
+    next: { revalidate: 5 * 60, tags: [CacheTags.Post.list] },
     params: query,
   })
   if (res.status !== 200) throw new Error(res.message)
@@ -38,7 +39,7 @@ export async function getPinnedPostList(
   query: GetPinnedPostListQuery,
 ): Promise<GetPinnedPostListData> {
   const res = await API.get<GetPinnedPostListResponse>(GetPinnedPostList.path, {
-    next: { revalidate: 5 * 60, tags: ['post:pinned'] },
+    next: { revalidate: 5 * 60, tags: [CacheTags.Post.pinned] },
     params: query,
   })
   if (res.status !== 200) throw new Error(res.message)
@@ -48,7 +49,7 @@ export async function getPinnedPostList(
 // 인기 글 목록 조회
 export async function getPopularPostList(): Promise<GetPopularPostListData> {
   const res = await API.get<GetPopularPostListResponse>(GetPopularPostList.path, {
-    next: { revalidate: 5 * 60, tags: ['post:popular'] },
+    next: { revalidate: 5 * 60, tags: [CacheTags.Post.popular] },
   })
   if (res.status !== 200) throw new Error(res.message)
   return res.data
@@ -59,7 +60,10 @@ export async function getPostDetail(
   params: GetPostDetailParams,
 ): Promise<GetPostDetailData | null> {
   const res = await API.get<GetPostDetailResponse>(GetPostDetail.path(params.postSeq), {
-    next: { revalidate: 5 * 60, tags: ['post:detail', `post:${params.postSeq}`] },
+    next: {
+      revalidate: 5 * 60,
+      tags: [CacheTags.Post.detail, CacheTags.Post.byId(params.postSeq)],
+    },
   })
   if (res.status === 404) return null
   if (res.status !== 200) {
@@ -73,7 +77,7 @@ export async function getMonthPostList(
   query: GetMonthPostListQuery,
 ): Promise<GetMonthPostListData> {
   const res = await API.get<GetMonthPostListResponse>(GetMonthPostList.path, {
-    next: { revalidate: 5 * 60, tags: [`post:calendar:${query.year}-${query.month}`] },
+    next: { revalidate: 5 * 60, tags: [CacheTags.Post.calendar(query.year, query.month)] },
     params: query,
   })
   if (res.status !== 200) throw new Error(res.message)
