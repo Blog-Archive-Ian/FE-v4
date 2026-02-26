@@ -149,3 +149,11 @@ Zod 기반 API Contract **Single Source of Truth**
 - NestJS
 - Prisma (ORM)
 - PostgreSQL
+
+## Repository Navigation
+
+- 🗂️ **Root**: [Blog Platform](https://github.com/Blog-Archive-Ian/blog-platform)
+- 🗂️ **Web**: [apps/web](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/web)
+- 🗂️ **Back Office**: [apps/bo](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/bo)
+- 🗂️ **API Server**: [apps/api](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/api)
+- 🗂️ **Contracts**: [packages/contracts](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/packages/contracts)
