@@ -1,98 +1,89 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Blog API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS 기반 REST API 서버입니다.  
+DB 접근, Contract 기반 응답 변환, Web 캐시 무효화 트리거 역할을 담당합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 1. Role in Architecture
 
-## Description
+API는 다음 책임을 가집니다:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 데이터 영속성 처리 (Prisma + MariaDB)
+- Contract 기반 응답 구조 보장
+- Write 요청 후 Web 캐시 무효화 트리거
 
-## Project setup
+Web과 BO 사이에서 데이터 경계를 명확히 분리하는 역할을 수행합니다.
 
-```bash
-$ pnpm install
+## 2. Database Layer
+
+- Prisma ORM 사용
+- MariaDB 연결 (PrismaMariaDb adapter)
+- NestJS lifecycle 기반 연결 관리
+
+```ts
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
 ```
 
-## Compile and run the project
+- onModuleInit → $connect()
+- onModuleDestroy → $disconnect()
 
-```bash
-# development
-$ pnpm run start
+👉 DB 연결 생명주기를 NestJS 모듈과 정렬했습니다.
 
-# watch mode
-$ pnpm run start:dev
+## 3. Contract-Based Response Mapping
 
-# production mode
-$ pnpm run start:prod
+DB 모델을 직접 반환하지 않고,
+`@blog/contracts`에 정의된 타입과 스키마를 기준으로 응답을 구성합니다.
+
+```ts
+import type { PostType } from '@blog/contracts';
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+```ts
+toContract(row: any, tags: string[]): PostType
 ```
 
-## Deployment
+### 설계 의도
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- DB 구조와 API 응답 구조 분리
+- snake_case → camelCase 정규화
+- null / boolean / Date 정규화 처리
+- 외부 계약(Contract)과 내부 모델 분리
+- zod schema 기반 요청 validation 수행 (contracts 공유)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+👉 Contract 계층이 컴파일 타임 타입 공유 + 런타임 검증을 동시에 담당하도록 설계했습니다.
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+## 4. Cache Invalidation Trigger
+
+게시글 create / update / delete 시
+Web의 /api/revalidate 엔드포인트를 호출합니다.
+
+```ts
+await fetch(`${FRONT_URL}/api/revalidate`, {
+  method: 'POST',
+  headers: {
+    'x-revalidate-secret': REVALIDATE_SECRET,
+  },
+  body: JSON.stringify({ tags }),
+});
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 설계 포인트
 
-## Resources
+- 캐시 소유권은 Web에 있음
+- API는 무효화 트리거 역할만 수행
+- revalidate 실패해도 Write는 성공해야 함
+- 런타임 경계를 침범하지 않는 구조
 
-Check out a few resources that may come in handy when working with NestJS:
+## 5. Transaction (Planned)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- 게시글 작성/수정 시 다중 테이블 변경
+- 향후 Prisma $transaction 적용 예정
 
-## Support
+## Repository Navigation
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- 🗂️ **Root**: [Blog Platform ↗](https://github.com/Blog-Archive-Ian/blog-platform)
+- 🗂️ **Web**: [apps/web ↗](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/web)
+- 🗂️ **Back Office**: [apps/bo ↗](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/bo)
+- 🗂️ **API Server**: [apps/api ↗](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/apps/api)
+- 🗂️ **Contracts**: [packages/contracts ↗](https://github.com/Blog-Archive-Ian/blog-platform/tree/dev/packages/contracts)
