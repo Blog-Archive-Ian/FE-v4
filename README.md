@@ -148,7 +148,7 @@ Zod 기반 API Contract **Single Source of Truth**
 
 - NestJS
 - Prisma (ORM)
-- PostgreSQL
+- MariaDB (MySQL-compatible)
 
 ## Repository Navigation
 
