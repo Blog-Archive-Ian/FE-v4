@@ -1,7 +1,9 @@
 # Blog Platform
 
-Monorepo-based Web / BO / API Architecture with Contract-First Design  
-A contract-driven, boundary-oriented architecture designed for scalability, consistency, and runtime separation.
+**🌐 Live Service** [Visit the Blog](https://blog.minjae-dev.com)
+
+Monorepo-based Web / BO / API Architecture  
+with Contract-First Design and Runtime Boundary Separation
 
 ## 1. Project Overview
 
