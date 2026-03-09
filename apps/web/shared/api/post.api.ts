@@ -14,6 +14,10 @@ import {
   GetPinnedPostListResponse,
   GetPopularPostList,
   GetPostDetail,
+  GetSameCategoryPostList,
+  type GetSameCategoryPostListData,
+  type GetSameCategoryPostListParams,
+  type GetSameCategoryPostListResponse,
   GetPostList,
   type GetPopularPostListData,
   type GetPopularPostListResponse,
@@ -100,4 +104,26 @@ export async function increasePostView(
   }
 
   return res.data.views
+}
+
+// 같은 카테고리의 다른 글 5개 조회 (현재 글, 비공개 글 제외)
+export async function getSameCategoryPostList(
+  params: GetSameCategoryPostListParams,
+): Promise<GetSameCategoryPostListData> {
+  const res = await API.get<GetSameCategoryPostListResponse>(
+    GetSameCategoryPostList.path(params.postSeq),
+    {
+      next: {
+        revalidate: 5 * 60,
+        // 같은 카테고리 글이 추가/수정/삭제되면 전체 Post 캐시가 무효화되도록 Post.all 태그 사용
+        tags: [CacheTags.Post.all],
+      },
+    },
+  )
+
+  if (res.status !== 200) {
+    throw new Error(res.message)
+  }
+
+  return res.data
 }
