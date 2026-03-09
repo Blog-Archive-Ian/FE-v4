@@ -20,6 +20,9 @@ import {
   type GetPostDetailData,
   type GetPostDetailParams,
   type GetPostDetailResponse,
+  IncreasePostView,
+  type IncreasePostViewParams,
+  type IncreasePostViewResponse,
 } from '@blog/contracts'
 
 //  글 목록 조회
@@ -82,4 +85,19 @@ export async function getMonthPostList(
   })
   if (res.status !== 200) throw new Error(res.message)
   return res.data
+}
+
+// 조회수 증가 (쿠키 기반 1시간 중복 방지)
+export async function increasePostView(
+  params: IncreasePostViewParams,
+): Promise<number> {
+  const res = await API.post<IncreasePostViewResponse>(
+    IncreasePostView.path(params.postSeq),
+  )
+
+  if (res.status !== 200) {
+    throw new Error(res.message)
+  }
+
+  return res.data.views
 }
