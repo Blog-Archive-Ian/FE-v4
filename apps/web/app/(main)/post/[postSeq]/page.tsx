@@ -1,11 +1,11 @@
 import { Comments } from '@/section/post/post-detail/comments'
 import { PostContent } from '@/section/post/post-detail/post-content'
 import { ScrollToBottomButton } from '@/section/post/post-detail/scroll-to-bottom-button'
-import { PostViewTracker } from '@/section/post/post-detail/view-tracker'
 import { TableOfContents } from '@/section/post/post-detail/toc'
-import { getPostDetail } from '@/shared/api/post.api'
+import { PostViewTracker } from '@/section/post/post-detail/view-tracker'
+import { getPostDetail, getSameCategoryPostList } from '@/shared/api/post.api'
 import { formatKoreanDate, stripMarkdown } from '@/shared/lib/format'
-import { GetPostDetailParams } from '@blog/contracts'
+import { GetPostDetailParams, GetSameCategoryPostListData } from '@blog/contracts'
 import { Badge, Separator } from '@blog/ui'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -80,6 +80,14 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
 
   if (!post || post.archived) notFound()
 
+  // 카테고리 연관글 목록 (에러가 나도 상세 페이지는 그대로 보여주기 위해 안전하게 처리)
+  let sameCategoryPosts: GetSameCategoryPostListData = []
+  try {
+    sameCategoryPosts = await getSameCategoryPostList({ postSeq })
+  } catch {
+    sameCategoryPosts = []
+  }
+
   const baseUrl = 'https://blog.minjae-dev.com'
   const url = `${baseUrl}/post/${postSeq}`
 
@@ -120,7 +128,7 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
 
         {/* 중앙 콘텐츠 */}
         <div className="mx-auto w-full max-w-200" id="post-article">
-          <article className="min-w-0 pb-20">
+          <article className="min-w-0 pb-5">
             <Link href={`/post-list/category/${post.category}`}>
               <p className="text-md lg:text-lg font-semibold text-muted-foreground">
                 {post.category}
@@ -142,6 +150,28 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
             <Separator className="my-6" />
             <PostContent post={post} />
           </article>
+
+          {/* 카테고리 연관글 섹션 */}
+          {sameCategoryPosts.length > 0 && (
+            <section className="mb-5 rounded-xl border bg-card px-4 py-5 sm:px-6">
+              <h2 className="text-sm font-semibold text-muted-foreground">카테고리 연관글</h2>
+              <div className="mt-3">
+                {sameCategoryPosts.map((item) => (
+                  <Link
+                    key={item.postSeq}
+                    href={`/post/${item.postSeq}`}
+                    className="group relative flex items-center justify-between py-2"
+                  >
+                    <span className="mr-3 line-clamp-1 text-sm sm:text-base text-muted-foreground">
+                      {item.title}
+                    </span>
+                    <span className="text-xs sm:text-sm text-muted-foreground">→</span>
+                    <div className="pointer-events-none absolute bottom-0 left-0 h-0.5 w-8 rounded-full bg-point opacity-0 transition-opacity duration-75 group-hover:opacity-100" />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           <Comments post={post} />
           <ScrollToBottomButton />
