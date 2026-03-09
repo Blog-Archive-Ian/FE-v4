@@ -2,11 +2,11 @@ import { z } from 'zod'
 import { CacheTags } from '../cache'
 import { ApiResponse, ApiResponseStrict, PaginatedResponse } from '../common'
 import {
-  CategoryPostSummarySchema,
   CreatePostSchema,
   FilteredPostListQuerySchema,
   PostListQuerySchema,
   PostSchema,
+  PostSummarySchema,
 } from './post.schema'
 
 // 글 목록 조회
@@ -60,16 +60,11 @@ export const GetSameCategoryPostList = {
   Params: z.object({
     postSeq: z.union([z.number(), z.string()]),
   }),
-  Response: ApiResponseStrict(z.array(CategoryPostSummarySchema)),
+  Response: ApiResponseStrict(z.array(PostSummarySchema)),
 } as const
-export type GetSameCategoryPostListResponse = z.infer<
-  typeof GetSameCategoryPostList.Response
->
-export type GetSameCategoryPostListParams = z.infer<
-  typeof GetSameCategoryPostList.Params
->
-export type GetSameCategoryPostListData =
-  GetSameCategoryPostListResponse['data']
+export type GetSameCategoryPostListResponse = z.infer<typeof GetSameCategoryPostList.Response>
+export type GetSameCategoryPostListParams = z.infer<typeof GetSameCategoryPostList.Params>
+export type GetSameCategoryPostListData = GetSameCategoryPostListResponse['data']
 
 // 월별 게시글 목록 조회
 export const GetMonthPostList = {
@@ -244,10 +239,7 @@ export const IncreasePostView = {
       views: z.number(),
     }),
   ),
-  revalidate: (postSeq: number | string) => [
-    CacheTags.Post.byId(postSeq),
-    CacheTags.Post.popular,
-  ],
+  revalidate: (postSeq: number | string) => [CacheTags.Post.byId(postSeq), CacheTags.Post.popular],
 } as const
 export type IncreasePostViewResponse = z.infer<typeof IncreasePostView.Response>
 export type IncreasePostViewParams = z.infer<typeof IncreasePostView.Params>

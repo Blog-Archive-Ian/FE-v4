@@ -17,13 +17,13 @@ export const PostSchema = z.object({
 export type PostType = z.infer<typeof PostSchema>
 
 // 축약 스키마
-export const CategoryPostSummarySchema = z.object({
+export const PostSummarySchema = z.object({
   postSeq: z.number(),
   title: z.string(),
   category: z.string(),
 })
 
-export type CategoryPostSummaryType = z.infer<typeof CategoryPostSummarySchema>
+export type CategoryPostSummaryType = z.infer<typeof PostSummarySchema>
 
 export const PostListQuerySchema = PaginationQuerySchema.extend({
   tag: z.string().optional(),
