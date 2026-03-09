@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { CacheTags } from '../cache'
 import { ApiResponse, ApiResponseStrict, PaginatedResponse } from '../common'
 import {
+  CategoryPostSummarySchema,
   CreatePostSchema,
   FilteredPostListQuerySchema,
   PostListQuerySchema,
@@ -51,6 +52,24 @@ export const GetPostDetail = {
 export type GetPostDetailResponse = z.infer<typeof GetPostDetail.Response> // 응답 타입
 export type GetPostDetailParams = z.infer<typeof GetPostDetail.Params> // 요청 파라미터 타입
 export type GetPostDetailData = GetPostDetailResponse['data'] // 실제 데이터 타입
+
+// 같은 카테고리의 다른 글 5개 조회 (현재 글, 비공개 글 제외)
+export const GetSameCategoryPostList = {
+  method: 'GET',
+  path: (postSeq: number | string) => `/post/${postSeq}/same-category`,
+  Params: z.object({
+    postSeq: z.union([z.number(), z.string()]),
+  }),
+  Response: ApiResponseStrict(z.array(CategoryPostSummarySchema)),
+} as const
+export type GetSameCategoryPostListResponse = z.infer<
+  typeof GetSameCategoryPostList.Response
+>
+export type GetSameCategoryPostListParams = z.infer<
+  typeof GetSameCategoryPostList.Params
+>
+export type GetSameCategoryPostListData =
+  GetSameCategoryPostListResponse['data']
 
 // 월별 게시글 목록 조회
 export const GetMonthPostList = {

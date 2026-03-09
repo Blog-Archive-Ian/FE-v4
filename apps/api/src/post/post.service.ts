@@ -259,6 +259,56 @@ export class PostService {
     return this.mapper.toContract(row, tags);
   }
 
+  // 같은 카테고리의 다른 글 5개 조회 (현재 글, 비공개 글 제외)
+  async getSameCategoryPostList(params: { postSeq: number | string }) {
+    const postSeq = BigInt(params.postSeq);
+
+    // 기준이 되는 게시글에서 카테고리 정보를 먼저 조회
+    const basePost = await this.prisma.post.findUnique({
+      where: { post_seq: postSeq },
+      select: {
+        category_id: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!basePost) {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
+
+    // 카테고리가 없는 경우 추천할 글이 없다고 보고 빈 배열 반환
+    if (!basePost.category_id) {
+      return [];
+    }
+
+    const rows = await this.prisma.post.findMany({
+      where: {
+        category_id: basePost.category_id,
+        is_archived: false, // 비공개(보관) 글 제외
+        post_seq: {
+          not: postSeq, // 현재 글 제외
+        },
+      },
+      orderBy: {
+        created_at: 'desc', // 최신순 정렬
+      },
+      take: 5,
+      include: {
+        category: true,
+      },
+    });
+
+    return rows.map((row) => ({
+      postSeq: Number(row.post_seq),
+      title: row.title,
+      category: row.category?.name ?? basePost.category?.name ?? '',
+    }));
+  }
+
   private async resolveCategoryId(
     categoryName: string,
     userId: string | null,

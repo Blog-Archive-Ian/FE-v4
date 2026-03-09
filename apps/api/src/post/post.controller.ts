@@ -6,6 +6,7 @@ import type {
   GetMonthPostListResponse,
   GetPopularPostListResponse,
   GetPostDetailResponse,
+  GetSameCategoryPostListResponse,
   IncreasePostViewResponse,
   PinPostResponse,
   UnArchivePostResponse,
@@ -20,6 +21,7 @@ import {
   GetMonthPostList,
   GetPopularPostList,
   GetPostDetail,
+  GetSameCategoryPostList,
   IncreasePostView,
   PinPost,
   UnArchivePost,
@@ -135,6 +137,32 @@ export class PostController {
     return {
       status: 200,
       message: '게시글이 성공적으로 조회되었습니다.',
+      data,
+    };
+  }
+
+  // 같은 카테고리의 다른 글 5개 조회 (현재 글, 비공개 글 제외)
+  @Get(GetSameCategoryPostList.path(':postSeq'))
+  async getSameCategoryPostList(
+    @Param() rawParams: Record<string, unknown>,
+  ): Promise<GetSameCategoryPostListResponse> {
+    const parsed = GetSameCategoryPostList.Params.safeParse({
+      postSeq: Number(rawParams.postSeq),
+    });
+
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: '같은 카테고리 게시글 조회에 실패했습니다.',
+        status: 500,
+        data: null,
+      });
+    }
+
+    const data = await this.postService.getSameCategoryPostList(parsed.data);
+
+    return {
+      status: 200,
+      message: '같은 카테고리 게시글이 성공적으로 조회되었습니다.',
       data,
     };
   }
