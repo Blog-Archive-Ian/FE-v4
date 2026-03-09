@@ -212,3 +212,23 @@ export const UnArchivePost = {
 } as const
 export type UnArchivePostResponse = z.infer<typeof UnArchivePost.Response>
 export type UnArchivePostParams = z.infer<typeof UnArchivePost.Params>
+
+// 조회수 증가 (쿠키 기반 중복 방지 전용)
+export const IncreasePostView = {
+  method: 'POST',
+  path: (postSeq: number | string) => `/post/${postSeq}/view`,
+  Params: z.object({
+    postSeq: z.number(),
+  }),
+  Response: ApiResponseStrict(
+    z.object({
+      views: z.number(),
+    }),
+  ),
+  revalidate: (postSeq: number | string) => [
+    CacheTags.Post.byId(postSeq),
+    CacheTags.Post.popular,
+  ],
+} as const
+export type IncreasePostViewResponse = z.infer<typeof IncreasePostView.Response>
+export type IncreasePostViewParams = z.infer<typeof IncreasePostView.Params>

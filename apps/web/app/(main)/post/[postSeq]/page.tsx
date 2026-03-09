@@ -1,6 +1,7 @@
 import { Comments } from '@/section/post/post-detail/comments'
 import { PostContent } from '@/section/post/post-detail/post-content'
 import { ScrollToBottomButton } from '@/section/post/post-detail/scroll-to-bottom-button'
+import { PostViewTracker } from '@/section/post/post-detail/view-tracker'
 import { TableOfContents } from '@/section/post/post-detail/toc'
 import { getPostDetail } from '@/shared/api/post.api'
 import { formatKoreanDate, stripMarkdown } from '@/shared/lib/format'
@@ -114,6 +115,9 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
       />
 
       <div className="relative mx-auto w-full flex">
+        {/* 조회수 증가 트래커 (클라이언트에서 쿠키 기반 1시간 중복 방지) */}
+        <PostViewTracker postSeq={Number(postSeq)} />
+
         {/* 중앙 콘텐츠 */}
         <div className="mx-auto w-full max-w-200" id="post-article">
           <article className="min-w-0 pb-20">

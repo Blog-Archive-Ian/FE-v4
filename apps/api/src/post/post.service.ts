@@ -12,6 +12,8 @@ import {
   type GetPopularPostListData,
   type GetPostDetailData,
   type GetPostDetailParams,
+  IncreasePostView,
+  type IncreasePostViewParams,
   PinPost,
   type PinPostParams,
   UnArchivePost,
@@ -362,5 +364,54 @@ export class PostService {
     }
 
     return Array.from(daySet).sort((a, b) => a - b);
+  }
+
+  // 조회수 증가
+  async increasePostView(params: IncreasePostViewParams): Promise<number> {
+    const postSeq = BigInt(params.postSeq);
+
+    const updated = await this.prisma.post.updateMany({
+      where: { post_seq: postSeq },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+
+    if (updated.count === 0) {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
+
+    const row = await this.prisma.post.findUnique({
+      where: { post_seq: postSeq },
+      select: { views: true },
+    });
+
+    if (!row) {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
+
+    await this.revalidate.revalidateTags(
+      IncreasePostView.revalidate(params.postSeq),
+    );
+
+    return row.views;
+  }
+
+  // 현재 조회수 조회
+  async getPostViews(params: IncreasePostViewParams): Promise<number> {
+    const postSeq = BigInt(params.postSeq);
+
+    const row = await this.prisma.post.findUnique({
+      where: { post_seq: postSeq },
+      select: { views: true },
+    });
+
+    if (!row) {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
+
+    return row.views;
   }
 }

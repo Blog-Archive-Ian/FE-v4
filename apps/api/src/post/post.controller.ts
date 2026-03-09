@@ -6,6 +6,7 @@ import type {
   GetMonthPostListResponse,
   GetPopularPostListResponse,
   GetPostDetailResponse,
+  IncreasePostViewResponse,
   PinPostResponse,
   UnArchivePostResponse,
   UnPinPostResponse,
@@ -19,6 +20,7 @@ import {
   GetMonthPostList,
   GetPopularPostList,
   GetPostDetail,
+  IncreasePostView,
   PinPost,
   UnArchivePost,
   UnPinPost,
@@ -34,8 +36,11 @@ import {
   Post,
   Put,
   Query,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import type { Request, Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/auth/user.decorator';
 
@@ -131,6 +136,55 @@ export class PostController {
       status: 200,
       message: '게시글이 성공적으로 조회되었습니다.',
       data,
+    };
+  }
+
+  // 조회수 증가 (쿠키 기반 1시간 중복 방지)
+  @Post(IncreasePostView.path(':postSeq'))
+  async increasePostView(
+    @Param() rawParams: Record<string, unknown>,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<IncreasePostViewResponse> {
+    const parsed = IncreasePostView.Params.safeParse({
+      postSeq: Number(rawParams.postSeq),
+    });
+
+    if (!parsed.success) {
+      throw new BadRequestException({
+        message: '조회수 증가에 실패했습니다.',
+        status: 500,
+        data: null,
+      });
+    }
+
+    const postSeq = parsed.data.postSeq;
+    const cookieKey = `post_view_${postSeq}`;
+    const hasViewCookie = Boolean(
+      (req as Request & { cookies?: Record<string, string> }).cookies?.[
+        cookieKey
+      ],
+    );
+
+    // 이미 1시간 이내에 조회한 경우: DB 조회수는 증가시키지 않고 현재 값만 반환
+    const views = hasViewCookie
+      ? await this.postService.getPostViews(parsed.data)
+      : await this.postService.increasePostView(parsed.data);
+
+    if (!hasViewCookie) {
+      res.cookie(cookieKey, '1', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
+        maxAge: 1000 * 60 * 60, // 1시간
+      });
+    }
+
+    return {
+      status: 200,
+      message: '조회수가 성공적으로 처리되었습니다.',
+      data: { views },
     };
   }
 
