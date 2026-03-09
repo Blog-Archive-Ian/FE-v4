@@ -1,5 +1,6 @@
 import { Comments } from '@/section/post/post-detail/comments'
 import { PostContent } from '@/section/post/post-detail/post-content'
+import { PostHeaderTitleTracker } from '@/section/post/post-detail/post-header-title-tracker'
 import { ScrollToBottomButton } from '@/section/post/post-detail/scroll-to-bottom-button'
 import { TableOfContents } from '@/section/post/post-detail/toc'
 import { PostViewTracker } from '@/section/post/post-detail/view-tracker'
@@ -125,6 +126,8 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
       <div className="relative mx-auto w-full flex">
         {/* 조회수 증가 트래커 (클라이언트에서 쿠키 기반 1시간 중복 방지) */}
         <PostViewTracker postSeq={Number(postSeq)} />
+        {/* 헤더에 현재 게시글 제목을 표시하기 위한 트래커 */}
+        <PostHeaderTitleTracker postTitle={post.title} />
 
         {/* 중앙 콘텐츠 */}
         <div className="mx-auto w-full max-w-200" id="post-article">
@@ -135,7 +138,7 @@ export default async function PostPage({ params }: { params: Promise<GetPostDeta
               </p>
             </Link>
 
-            <h1 className="mt-3 text-2xl lg:text-4xl font-semibold tracking-tight">{post.title}</h1>
+            <h1 className="mt-3 text-2xl lg:text-3xl font-semibold tracking-tight">{post.title}</h1>
 
             <div className="mt-5 flex flex-wrap gap-2">
               {post.tags.map((tag) => (
