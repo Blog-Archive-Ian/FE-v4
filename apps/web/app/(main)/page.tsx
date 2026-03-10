@@ -51,7 +51,7 @@ export default async function Home() {
       </section>
       <div className="hidden  xl:w-90 shrink-0 xl:flex xl:flex-col gap-10">
         <div className="border-l-2 border-border pl-8">
-          <h2 className="mb-6 text-lg font-semibold">인기글</h2>
+          <h2 className="mb-2 text-lg font-semibold">인기글</h2>
           {popularPosts.slice(0, 5).map((post) => (
             <SimplePostItem key={post.postSeq} post={post} />
           ))}

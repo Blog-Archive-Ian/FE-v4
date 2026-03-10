@@ -72,8 +72,8 @@ export const TableOfContents = ({ title = 'On this page' }: TableOfContentsProps
 
   if (items.length === 0) return null
 
-  return (
-    <aside className="sticky top-24 w-[320px] border-l pl-6">
+      return (
+    <aside className="sticky top-24 w-full border-l pl-6">
       <p className="mb-3 text-md font-semibold text-foreground">{title}</p>
 
       <div className="max-h-[calc(100vh-160px)] overflow-y-auto pr-2 scrollbar-hide">
