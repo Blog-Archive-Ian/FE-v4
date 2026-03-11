@@ -9,10 +9,7 @@ export const GenerateTroubleshootDraftSchema = z.object({
 export type GenerateTroubleshootDraftType = z.infer<typeof GenerateTroubleshootDraftSchema>
 
 export const GenerateTroubleshootDraftResultSchema = z.object({
-  title: z.string(),
-  summary: z.string(),
-  tags: z.array(z.string()),
-  content: z.string(),
+  draftId: z.string(),
 })
 
 export type GenerateTroubleshootDraftResultType = z.infer<

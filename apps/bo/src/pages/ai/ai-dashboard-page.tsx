@@ -1,8 +1,10 @@
 import { generateTroubleshootDraft } from '@/shared/api/ai.api'
 import { Button, Input, Label, Textarea, toast } from '@blog/ui'
+import { useNavigate } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
 export const AiDashboardPage = () => {
+  const navigate = useNavigate()
   const [githubUrl, setGithubUrl] = useState('')
   const [additionalContext, setAdditionalContext] = useState('')
   const [cursorChatLogFile, setCursorChatLogFile] = useState<File | null>(null)
@@ -40,15 +42,29 @@ export const AiDashboardPage = () => {
 
     setIsSubmitting(true)
     try {
-      await generateTroubleshootDraft({
-        githubUrl: url,
-        additionalContext: additionalContext.trim() || undefined,
-        cursorChatLogFile,
-      })
+      // 최소 3초 정도는 로딩 상태를 보여주기 위해 인위적인 지연 추가
+      const [data] = await Promise.all([
+        generateTroubleshootDraft({
+          githubUrl: url,
+          additionalContext: additionalContext.trim() || undefined,
+          cursorChatLogFile,
+        }),
+        new Promise((resolve) => setTimeout(resolve, 3000)),
+      ])
 
-      toast.success('초안 생성 요청이 완료되었습니다.')
+      toast.success('초안 생성 요청이 완료되었습니다. 에디터 화면으로 이동합니다.')
       setAdditionalContext('')
       setCursorChatLogFile(null)
+
+      // 생성 이후 기존 글 작성 화면으로 이동 (포스팅 화면 재사용)
+      navigate({
+        to: '/posts/new',
+        search: (prev) =>
+          ({
+            ...prev,
+            draftId: data.draftId,
+          }) as any,
+      })
     } catch (err) {
       toast.error((err as Error)?.message ?? '초안 생성에 실패했습니다.')
     } finally {

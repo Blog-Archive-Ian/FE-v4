@@ -9,6 +9,8 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFile,
   UseGuards,
@@ -100,6 +102,40 @@ export class AiController {
       status: 200,
       message: 'AI 초안 생성이 성공적으로 완료되었습니다.',
       data,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/ai/drafts/:draftId')
+  async getDraft(
+    @Param('draftId') draftId: string,
+  ): Promise<{
+    status: number;
+    message: string;
+    data: {
+      draftId: string;
+      title: string;
+      summary: string;
+      tags: string[];
+      content: string;
+    } | null;
+  }> {
+    if (!draftId) {
+      throw new BadRequestException({
+        status: 400,
+        message: 'draftId가 필요합니다.',
+        data: null,
+      });
+    }
+
+    // NOTE: 아직 DB/AI 서비스가 붙지 않았으므로
+    // 넘어온 draftId를 그대로 사용해서 목 데이터를 구성해 반환한다.
+    const draft = this.aiService.buildMockDraft(draftId);
+
+    return {
+      status: 200,
+      message: '초안이 성공적으로 조회되었습니다.',
+      data: draft,
     };
   }
 }

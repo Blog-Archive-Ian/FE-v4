@@ -1,10 +1,11 @@
 import { Alert } from '@/shared/components/molecules/alert'
 import { CustomEditor } from '@/shared/components/molecules/editor'
 import { UnsavedChangesGuard } from '@/shared/components/molecules/unsaved-changes-guard'
+import { getDraftById } from '@/shared/api/ai.api'
 import { useCreatePost } from '@/shared/query-hook/post.query'
 import { useCategories } from '@/shared/query-hook/user.query'
-import { Button, cn, Input, Label } from '@blog/ui'
-import { useNavigate } from '@tanstack/react-router'
+import { Button, cn, Input, Label, toast } from '@blog/ui'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { Plus, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useWatch } from 'react-hook-form'
@@ -12,6 +13,7 @@ import { useCreateForm } from './use-post-form'
 
 export const CreatePostPage = () => {
   const navigate = useNavigate()
+  const search = useSearch({ from: '/(auth)/posts/new' }) as { draftId?: string }
 
   const { data: categories } = useCategories()
   const { mutateAsync: createPost } = useCreatePost()
@@ -92,6 +94,33 @@ export const CreatePostPage = () => {
   useEffect(() => {
     setCategoryInput(category ?? '')
   }, [category])
+
+  useEffect(() => {
+    if (!search?.draftId) return
+    ;(async () => {
+      try {
+        const draft = await getDraftById(search.draftId!)
+        if (!draft) {
+          toast.error('AI 초안을 찾을 수 없습니다.')
+          return
+        }
+
+        methods.reset(
+          {
+            title: draft.title,
+            content: draft.content,
+            tags: draft.tags ?? [],
+            category: '',
+          },
+          {
+            keepDefaultValues: false,
+          },
+        )
+      } catch (err) {
+        toast.error((err as Error)?.message ?? 'AI 초안 불러오기 중 오류가 발생했습니다.')
+      }
+    })()
+  }, [methods, search?.draftId])
 
   return (
     <div>
