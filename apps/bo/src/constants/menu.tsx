@@ -1,6 +1,6 @@
 import { router } from '@/router'
 import { type ToOptions } from '@tanstack/react-router'
-import { FileText, LayoutDashboard, SquarePen, UserCog } from 'lucide-react'
+import { FileText, LayoutDashboard, SquarePen, UserCog, Sparkles } from 'lucide-react'
 interface MenuItem {
   title: string
   url?: ToOptions<typeof router>['to']
@@ -34,5 +34,10 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: SquarePen,
       },
     ],
+  },
+  {
+    title: 'AI',
+    url: '/ai',
+    icon: Sparkles,
   },
 ]

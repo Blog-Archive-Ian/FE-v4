@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as authDashboardRouteImport } from './routes/(auth)/dashboard'
+import { Route as authAiRouteImport } from './routes/(auth)/ai'
 import { Route as authUserInfoRouteImport } from './routes/(auth)/user/info'
 import { Route as authUserEditRouteImport } from './routes/(auth)/user/edit'
 import { Route as authPostsNewRouteImport } from './routes/(auth)/posts/new'
@@ -31,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
 const authDashboardRoute = authDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authAiRoute = authAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => authRouteRoute,
 } as any)
 const authUserInfoRoute = authUserInfoRouteImport.update({
@@ -66,6 +72,7 @@ const authPostsEditPostSeqRoute = authPostsEditPostSeqRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai': typeof authAiRoute
   '/dashboard': typeof authDashboardRoute
   '/posts/$postSeq': typeof authPostsPostSeqRoute
   '/posts/list': typeof authPostsListRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai': typeof authAiRoute
   '/dashboard': typeof authDashboardRoute
   '/posts/$postSeq': typeof authPostsPostSeqRoute
   '/posts/list': typeof authPostsListRoute
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
+  '/(auth)/ai': typeof authAiRoute
   '/(auth)/dashboard': typeof authDashboardRoute
   '/(auth)/posts/$postSeq': typeof authPostsPostSeqRoute
   '/(auth)/posts/list': typeof authPostsListRoute
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai'
     | '/dashboard'
     | '/posts/$postSeq'
     | '/posts/list'
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai'
     | '/dashboard'
     | '/posts/$postSeq'
     | '/posts/list'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(auth)'
+    | '/(auth)/ai'
     | '/(auth)/dashboard'
     | '/(auth)/posts/$postSeq'
     | '/(auth)/posts/list'
@@ -156,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof authDashboardRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/ai': {
+      id: '/(auth)/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof authAiRouteImport
       parentRoute: typeof authRouteRoute
     }
     '/(auth)/user/info': {
@@ -204,6 +223,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface authRouteRouteChildren {
+  authAiRoute: typeof authAiRoute
   authDashboardRoute: typeof authDashboardRoute
   authPostsPostSeqRoute: typeof authPostsPostSeqRoute
   authPostsListRoute: typeof authPostsListRoute
@@ -214,6 +234,7 @@ interface authRouteRouteChildren {
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
+  authAiRoute: authAiRoute,
   authDashboardRoute: authDashboardRoute,
   authPostsPostSeqRoute: authPostsPostSeqRoute,
   authPostsListRoute: authPostsListRoute,
