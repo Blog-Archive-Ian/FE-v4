@@ -369,18 +369,18 @@ createdAt
 # 8. 기술 스택
 
 AI Service
-• Spring Boot
-• Spring Web
-• Spring Validation
-• Spring Data JPA
-• WebClient
-• PostgreSQL
+- Spring Boot
+- Spring Web
+- Spring Validation
+- Spring Data JPA
+- WebClient
+- PostgreSQL
 
 AI
-• OpenAI API
+- OpenAI API
 
 GitHub
-• GitHub REST API
+- GitHub REST API
 
 ---
 
@@ -391,25 +391,25 @@ Possible improvements:
 GitHub Webhook Integration
 
 Automatically generate blog drafts when:
-• Pull Request merged
-• Issue closed
+- Pull Request merged
+- Issue closed
 
 ---
 
 Multi-user Support
 
 Add:
-• user authentication
-• repo access management
-• generation history
+- user authentication
+- repo access management
+- generation history
 
 ---
 
 Knowledge Memory
 
 Store:
-• past troubleshooting cases
-• reuse patterns for similar issues
+- past troubleshooting cases
+- reuse patterns for similar issues
 
 ---
 
@@ -447,25 +447,3 @@ GitHub 기록과 AI 도구와의 대화 로그를 함께 활용해
 - 과거 Issue/PR/Commit 기록과 대화 로그를 기반으로
 - 사고 과정이 살아 있는 기술 블로그 초안을 자동으로 얻게 되고,
 - 문서화에 쓰이던 시간을 실제 개발/학습에 더 쓸 수 있게 된다.
-
-```code
-
-# Cursor에게 맡기는 방법 (팁)
-
-Cursor에서 이렇게 시키면 됩니다.
-
-예:
-```
-
-Based on AI_TROUBLESHOOT_POST_GENERATOR_DESIGN.md
-
-Create a Spring Boot project structure for ai-service.
-
-Include:
-• Controller
-• Service
-• GitHub client
-• OpenAI client
-• Domain entities
-• DTOs
-• Generation pipeline
