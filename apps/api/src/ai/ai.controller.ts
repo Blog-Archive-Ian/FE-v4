@@ -1,3 +1,10 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+import {
+  GenerateTroubleshootDraft,
+  type GenerateTroubleshootDraftResponse,
+} from '@blog/contracts';
 import {
   BadRequestException,
   Body,
@@ -8,12 +15,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { GenerateTroubleshootDraft, type GenerateTroubleshootDraftResponse } from '@blog/contracts';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { diskStorage } from 'multer';
 import type { Request } from 'express';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { diskStorage } from 'multer';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { AiService } from './ai.service';
 
@@ -37,20 +41,29 @@ export class AiController {
     FileInterceptor('cursorChatLog', {
       storage: diskStorage({
         destination: (req, file, cb) => {
+          void req;
+          void file;
           const dir = path.join(process.cwd(), 'storage', 'cursor-logs');
           ensureDir(dir);
           cb(null, dir);
         },
         filename: (req: Request, file, cb) => {
+          void req;
           const safeExt = path.extname(file.originalname || '') || '.md';
           const name = `cursor-log-${Date.now()}${safeExt}`;
           cb(null, name);
         },
       }),
       fileFilter: (req, file, cb) => {
+        void req;
         const ext = path.extname(file.originalname || '').toLowerCase();
         if (ext && ext !== '.md') {
-          cb(new BadRequestException('cursorChatLog는 .md 파일만 업로드 가능합니다.'), false);
+          cb(
+            new BadRequestException(
+              'cursorChatLog는 .md 파일만 업로드 가능합니다.',
+            ),
+            false,
+          );
           return;
         }
         cb(null, true);
@@ -90,4 +103,3 @@ export class AiController {
     };
   }
 }
-

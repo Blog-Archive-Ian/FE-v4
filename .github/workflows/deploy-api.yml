@@ -52,6 +52,7 @@ jobs:
               "FRONT_URL=${{ secrets.FRONT_URL }}" \
               "REVALIDATE_SECRET=${{ secrets.REVALIDATE_SECRET }}" \
               "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
+              "AI_SERVICE_URL=${{ secrets.AI_SERVICE_URL }}" \
               > apps/api/.env
 
               pnpm install --frozen-lockfile
