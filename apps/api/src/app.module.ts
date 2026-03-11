@@ -8,6 +8,7 @@ import { HealthModule } from './health/health.module';
 import { PostModule } from './post/post.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     PostModule,
     UserModule,
+    AiModule,
     CommonModule,
   ],
 })
