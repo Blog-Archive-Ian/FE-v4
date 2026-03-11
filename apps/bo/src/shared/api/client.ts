@@ -68,6 +68,17 @@ export class API {
     return API.request<TResponse, TBody>('POST', url, { ...options, body })
   }
 
+  // multipart/form-data 전용 (파일 업로드)
+  static postForm<TResponse>(url: string, formData: FormData) {
+    return API.request<TResponse, FormData>('POST', url, {
+      body: formData,
+      headers: {
+        // axios가 boundary를 자동 설정하게 두는게 핵심
+        'Content-Type': undefined as unknown as string,
+      },
+    })
+  }
+
   static put<TResponse, TBody = unknown>(
     url: string,
     body?: TBody,
