@@ -1,5 +1,4 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 
 type AiServiceGeneratePayload = {
   githubUrl: string;
@@ -16,44 +15,26 @@ type AiServiceGenerateResponse = {
 
 @Injectable()
 export class AiService {
-  constructor(private readonly config: ConfigService) {}
+  constructor() {}
 
   async generateTroubleshootDraft(
     payload: AiServiceGeneratePayload,
   ): Promise<AiServiceGenerateResponse> {
-    const baseUrl = this.config.get<string>('AI_SERVICE_URL');
-    if (!baseUrl) {
-      throw new ServiceUnavailableException('AI_SERVICE_URL이 설정되어 있지 않습니다.');
-    }
+    // NOTE: 아직 배포 환경에서 ai-service가 붙지 않았으므로 목 응답으로 처리
+    // 나중에 실제 연동을 붙일 때 AI_SERVICE_URL을 다시 추가하고 fetch 호출을 활성화하면 됨.
+    void payload;
 
-    const url = `${baseUrl.replace(/\/$/, '')}/api/generate`;
-
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(payload),
-    }).catch((err) => {
-      throw new ServiceUnavailableException(
-        `AI 서비스 호출에 실패했습니다: ${String(err)}`,
-      );
-    });
-
-    if (!res.ok) {
-      const body = await res.text().catch(() => '');
-      throw new ServiceUnavailableException(
-        `AI 서비스 응답이 실패했습니다: status=${res.status} body=${body}`,
-      );
-    }
-
-    const json = (await res.json().catch(() => null)) as
-      | AiServiceGenerateResponse
-      | null;
-
-    if (!json) {
-      throw new ServiceUnavailableException('AI 서비스 응답 파싱에 실패했습니다.');
-    }
-
-    return json;
+    return {
+      title: 'Draft: (mock)',
+      summary: 'AI 서비스 연동 전까지는 mock 응답을 반환합니다.',
+      tags: ['ai', 'troubleshooting', 'mock'],
+      content: [
+        '# Problem Situation',
+        '',
+        '(AI 서비스 연동 전까지는 mock 콘텐츠를 사용합니다.)',
+        '',
+      ].join('\n'),
+    };
   }
 }
 

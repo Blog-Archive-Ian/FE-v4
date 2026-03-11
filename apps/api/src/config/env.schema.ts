@@ -37,7 +37,4 @@ export class EnvSchema {
     message: 'DATABASE_URL must start with mysql:// (or mariadb://)',
   })
   DATABASE_URL!: string;
-
-  @IsUrl({ require_tld: false })
-  AI_SERVICE_URL!: string;
 }
